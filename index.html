@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet" />
 
-  <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -829,7 +829,7 @@
 <!-- Scanner overlay -->
 <div class="scanner-overlay" id="scanner-overlay">
   <div class="scanner-video-wrap">
-    <video class="scanner-video" id="scanner-video" autoplay muted playsinline></video>
+    <div id="scanner-video" style="width:100%;height:100%;position:absolute;inset:0;"></div>
     <div class="scanner-frame"><span></span></div>
     <div class="scanner-line"></div>
   </div>
@@ -1051,41 +1051,89 @@ document.getElementById('modal-close').addEventListener('click', closeModal);
 document.getElementById('modal-backdrop').addEventListener('click', closeModal);
 
 /* ============================================================
-   SCANNER (ZXing)
+   SCANNER (html5-qrcode)
    ============================================================ */
-let codeReader = null;
-let scanControls = null;
+let html5Scanner = null;
 let scanCallback = null;
 
 async function openScanner(title, callback) {
   scanCallback = callback;
   document.getElementById('scanner-title').textContent = title || 'Escaneando...';
   document.getElementById('scanner-overlay').classList.add('open');
+
+  // html5-qrcode usa uma div como container, não um <video>
+  // Vamos usar o elemento #scanner-video-wrap como container
+  const containerId = 'scanner-video';
+
   try {
-    if (typeof ZXingBrowser === 'undefined') {
-      throw new Error('ZXing não carregou');
+    if (typeof Html5Qrcode === 'undefined') {
+      throw new Error('Scanner não carregou');
     }
-    codeReader = new ZXingBrowser.BrowserMultiFormatReader();
-    const videoEl = document.getElementById('scanner-video');
-    scanControls = await codeReader.decodeFromVideoDevice(undefined, videoEl, (result) => {
-      if (result) {
-        const code = result.getText();
+
+    // Para o scanner anterior se existir
+    if (html5Scanner) {
+      try { await html5Scanner.stop(); } catch(e) {}
+      html5Scanner = null;
+    }
+
+    html5Scanner = new Html5Qrcode(containerId, { verbose: false });
+
+    await html5Scanner.start(
+      { facingMode: 'environment' },
+      {
+        fps: 15,
+        qrbox: { width: 280, height: 140 },
+        aspectRatio: 1.7,
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.CODE_128,
+          Html5QrcodeSupportedFormats.CODE_39,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+          Html5QrcodeSupportedFormats.QR_CODE,
+        ]
+      },
+      (decodedText) => {
+        // Sucesso
+        const code = decodedText.trim();
         closeScanner();
         if (scanCallback) scanCallback(code);
+      },
+      (errorMsg) => {
+        // Tentando ler — silencia erros contínuos de "não encontrou ainda"
       }
-    });
+    );
+
+    // Esconde o vídeo padrão que não usamos mais
+    const videoEl = document.getElementById('scanner-video');
+    if (videoEl && videoEl.tagName === 'VIDEO') videoEl.style.display = 'none';
+
   } catch (err) {
-    console.error(err);
-    toast('Não foi possível acessar a câmera', 'error');
+    console.error('Scanner error:', err);
+    toast('Câmera indisponível — digite o código', 'warn');
     closeScanner();
     promptCodigo(title, callback);
   }
 }
-function closeScanner() {
-  if (scanControls) { try { scanControls.stop(); } catch (e) {} }
-  scanControls = null;
+
+async function closeScanner() {
+  if (html5Scanner) {
+    try {
+      if (html5Scanner.isScanning) {
+        await html5Scanner.stop();
+      }
+      html5Scanner.clear();
+    } catch(e) {}
+    html5Scanner = null;
+  }
   document.getElementById('scanner-overlay').classList.remove('open');
+
+  // Limpa o container pra próxima vez
+  const container = document.getElementById('scanner-video');
+  if (container) container.innerHTML = '';
 }
+
 document.getElementById('scanner-close').addEventListener('click', closeScanner);
 document.getElementById('scanner-manual').addEventListener('click', () => {
   const cb = scanCallback;
