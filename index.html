@@ -487,6 +487,178 @@
     .btn-ghost { background: none; color: var(--text-2); border: 1px solid var(--border); }
     .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+    /* SAÍDA RÁPIDA */
+    .saida-rapida-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+    }
+    .saida-rapida-overlay.open { display: flex; }
+
+    .saida-rapida-cam {
+      height: 52vh;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    #sr-video {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+    .sr-frame {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%; max-width: 320px;
+      height: 100px;
+      border-radius: 12px;
+      pointer-events: none;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .sr-frame::before, .sr-frame::after,
+    .sr-frame > span::before, .sr-frame > span::after {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      border: 3px solid white;
+    }
+    .sr-frame::before { top:-2px; left:-2px; border-right:none; border-bottom:none; border-radius:10px 0 0 0; }
+    .sr-frame::after  { top:-2px; right:-2px; border-left:none; border-bottom:none; border-radius:0 10px 0 0; }
+    .sr-frame > span::before { bottom:-2px; left:-2px; border-right:none; border-top:none; border-radius:0 0 0 10px; position:absolute; }
+    .sr-frame > span::after  { bottom:-2px; right:-2px; border-left:none; border-top:none; border-radius:0 0 10px 0; position:absolute; }
+
+    .sr-scan-line {
+      position: absolute;
+      left: 8%; right: 8%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #db2777, transparent);
+      animation: scan 1.8s ease-in-out infinite;
+    }
+    .sr-flash {
+      position: absolute;
+      inset: 0;
+      background: rgba(21, 128, 61, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .1s;
+    }
+    .sr-flash.show { opacity: 1; }
+
+    .sr-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      padding: calc(var(--safe-top) + 14px) 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7), transparent);
+      z-index: 2;
+    }
+    .sr-header h3 { color: white; font-size: 16px; font-weight: 700; }
+    .sr-counter {
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .sr-close {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: none; border-radius: 50%;
+      color: white;
+      display: grid; place-items: center;
+      cursor: pointer;
+    }
+
+    .sr-body {
+      flex: 1;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sr-status {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sr-status-text {
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .sr-status-text strong { color: var(--text); }
+    .sr-encerrar {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .sr-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px calc(16px + var(--safe-bottom));
+    }
+    .sr-empty {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-3);
+      font-size: 14px;
+    }
+    .sr-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      animation: slideIn .2s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .sr-item-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--success-bg);
+      color: var(--success);
+      display: grid; place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .sr-item-icon.erro { background: var(--danger-bg); color: var(--danger); }
+    .sr-item-info { flex: 1; min-width: 0; }
+    .sr-item-nome {
+      font-weight: 600;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sr-item-meta { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+    .sr-item-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .sr-item-badge.erro { color: var(--danger); }
+
     /* SCANNER */
     .scanner-overlay {
       position: fixed;
@@ -850,6 +1022,32 @@
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- SAÍDA RÁPIDA overlay -->
+<div class="saida-rapida-overlay" id="sr-overlay">
+  <div class="saida-rapida-cam">
+    <div id="sr-video"></div>
+    <div class="sr-frame"><span></span></div>
+    <div class="sr-scan-line"></div>
+    <div class="sr-flash" id="sr-flash"></div>
+    <div class="sr-header">
+      <h3>⚡ Saída Rápida</h3>
+      <span class="sr-counter" id="sr-counter">0 itens</span>
+      <button class="sr-close" id="sr-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="sr-body">
+    <div class="sr-status">
+      <div class="sr-status-text">Aponte a câmera para o código de barras</div>
+      <button class="sr-encerrar" id="sr-encerrar">Encerrar</button>
+    </div>
+    <div class="sr-list" id="sr-list">
+      <div class="sr-empty">Nenhum item escaneado ainda</div>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ============================================================
@@ -1281,6 +1479,11 @@ async function renderEstoque(app) {
         Escanear código de barras
       </button>
 
+      <button class="scan-cta" id="cta-saida-rapida" style="background:var(--accent);margin-top:10px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5"/><path d="M6 17l5-5-5-5"/></svg>
+        ⚡ Saída Rápida
+      </button>
+
       <div class="section-head">
         <h2>Produtos cadastrados</h2>
       </div>
@@ -1311,6 +1514,7 @@ async function renderEstoque(app) {
   });
   document.getElementById('btn-novo').addEventListener('click', () => openProdutoForm());
   document.getElementById('cta-scan').addEventListener('click', handleScanForMovement);
+  document.getElementById('cta-saida-rapida').addEventListener('click', abrirSaidaRapida);
   document.querySelectorAll('[data-product]').forEach(el => {
     el.addEventListener('click', () => openProdutoDetail(el.dataset.product));
   });
@@ -1982,6 +2186,153 @@ async function clearAllData() {
   toast('Dados apagados', 'success');
   render();
 }
+
+/* ============================================================
+   MODO SAÍDA RÁPIDA
+   ============================================================ */
+let srScanner = null;
+let srSessao = [];           // histórico da sessão
+let srUltimoCodigo = null;   // evita dupla leitura do mesmo código
+let srBloqueado = false;     // trava 1.5s após cada leitura
+
+async function abrirSaidaRapida() {
+  srSessao = [];
+  srUltimoCodigo = null;
+  srBloqueado = false;
+  renderSrLista();
+  atualizarSrContador();
+
+  document.getElementById('sr-overlay').classList.add('open');
+
+  try {
+    if (srScanner) {
+      try { await srScanner.stop(); srScanner.clear(); } catch(e) {}
+      srScanner = null;
+    }
+    srScanner = new Html5Qrcode('sr-video', { verbose: false });
+
+    await srScanner.start(
+      { facingMode: 'environment' },
+      {
+        fps: 15,
+        qrbox: { width: 280, height: 100 },
+        aspectRatio: 1.7,
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.CODE_128,
+          Html5QrcodeSupportedFormats.CODE_39,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+          Html5QrcodeSupportedFormats.QR_CODE,
+        ]
+      },
+      async (codigo) => {
+        // Ignora se bloqueado ou mesmo código repetido
+        if (srBloqueado) return;
+        if (codigo === srUltimoCodigo) return;
+
+        srBloqueado = true;
+        srUltimoCodigo = codigo;
+
+        await processarSaidaRapida(codigo);
+
+        // Desbloqueia depois de 2 segundos
+        setTimeout(() => {
+          srBloqueado = false;
+          srUltimoCodigo = null;
+        }, 2000);
+      },
+      () => {} // erros de leitura → silencia
+    );
+  } catch (err) {
+    console.error(err);
+    fecharSaidaRapida();
+    toast('Câmera indisponível', 'error');
+  }
+}
+
+async function processarSaidaRapida(codigo) {
+  const produto = await getProduto(codigo);
+  const agora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  // Flash visual
+  const flash = document.getElementById('sr-flash');
+  flash.classList.add('show');
+  setTimeout(() => flash.classList.remove('show'), 200);
+
+  if (!produto) {
+    // Produto não cadastrado
+    srSessao.unshift({ codigo, nome: 'Produto não cadastrado', ok: false, hora: agora });
+    renderSrLista();
+    atualizarSrContador();
+    return;
+  }
+
+  const total = await getStockTotal(codigo);
+  if (total <= 0) {
+    srSessao.unshift({ codigo, nome: produto.nome, ok: false, motivo: 'Sem estoque', hora: agora });
+    renderSrLista();
+    atualizarSrContador();
+    return;
+  }
+
+  // Debita 1 unidade (FIFO)
+  await darSaida(codigo, 1, 'Saída rápida');
+  const novoTotal = total - 1;
+
+  srSessao.unshift({ codigo, nome: produto.nome, ok: true, estoque: novoTotal, hora: agora });
+  renderSrLista();
+  atualizarSrContador();
+}
+
+function renderSrLista() {
+  const list = document.getElementById('sr-list');
+  if (srSessao.length === 0) {
+    list.innerHTML = '<div class="sr-empty">Nenhum item escaneado ainda</div>';
+    return;
+  }
+  list.innerHTML = srSessao.map(item => `
+    <div class="sr-item">
+      <div class="sr-item-icon ${item.ok ? '' : 'erro'}">${initials(item.nome)}</div>
+      <div class="sr-item-info">
+        <div class="sr-item-nome">${escapeHTML(item.nome)}</div>
+        <div class="sr-item-meta">
+          ${item.ok
+            ? `Restam ${item.estoque} un. · ${item.hora}`
+            : `${item.motivo || 'Não encontrado'} · ${item.hora}`
+          }
+        </div>
+      </div>
+      <div class="sr-item-badge ${item.ok ? '' : 'erro'}">
+        ${item.ok ? '−1' : '⚠'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function atualizarSrContador() {
+  const ok = srSessao.filter(i => i.ok).length;
+  const el = document.getElementById('sr-counter');
+  if (el) el.textContent = `${ok} ${ok === 1 ? 'item' : 'itens'}`;
+}
+
+async function fecharSaidaRapida() {
+  if (srScanner) {
+    try {
+      if (srScanner.isScanning) await srScanner.stop();
+      srScanner.clear();
+    } catch(e) {}
+    srScanner = null;
+  }
+  document.getElementById('sr-overlay').classList.remove('open');
+  const container = document.getElementById('sr-video');
+  if (container) container.innerHTML = '';
+  render(); // atualiza estoque na tela
+}
+
+document.getElementById('sr-close').addEventListener('click', fecharSaidaRapida);
+document.getElementById('sr-encerrar').addEventListener('click', fecharSaidaRapida);
 
 /* ============================================================
    INIT
