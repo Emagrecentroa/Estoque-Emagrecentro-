@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Estoque - Emagrentro Araruama</title>
+<title>Estoque - Emagrecentro Araruama</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
@@ -451,11 +451,11 @@
     <div class="modal-handle"></div>
     <h2>Novo Produto</h2>
     <div class="form-group">
-      <label class="form-label">Código de barras</label>
-      <input class="form-input" id="np-codigo" type="text" placeholder="Ex: 7891234567890">
+      <label class="form-label">Código de barras <span style="font-weight:600;color:var(--gray);font-size:10px">(opcional)</span></label>
+      <input class="form-input" id="np-codigo" type="text" placeholder="Deixe em branco se não tiver">
     </div>
     <div class="form-group">
-      <label class="form-label">Nome do produto</label>
+      <label class="form-label">Nome do produto *</label>
       <input class="form-input" id="np-nome" type="text" placeholder="Ex: BEST CRIO">
     </div>
     <div class="form-group">
@@ -856,10 +856,12 @@ function renderHistorico() {
 // ADD PRODUTO
 // ============================================================
 function addProduto() {
-  const codigo = document.getElementById('np-codigo').value.trim();
+  let codigo = document.getElementById('np-codigo').value.trim();
   const nome = document.getElementById('np-nome').value.trim();
   const min = parseInt(document.getElementById('np-min').value) || getCfg('estoque_minimo_padrao', 30);
-  if (!codigo || !nome) { toast('Preencha código e nome', 'red'); return; }
+  if (!nome) { toast('Informe o nome do produto', 'red'); return; }
+  // Se não informou código, gera um único baseado no nome + timestamp
+  if (!codigo) codigo = 'PROD_' + Date.now();
   if (db.produtos.find(p=>p.codigo===codigo)) { toast('Código já cadastrado', 'red'); return; }
   db.produtos.push({ codigo, nome, estoque_minimo: min });
   saveDB(db);
@@ -966,6 +968,16 @@ function renderAlertas() {
   }
 
   if (!html) html = '<div class="empty-state"><div class="icon">✅</div><p>Nenhum alerta! Tudo ok.</p></div>';
+  else {
+    // Botão enviar para gerente
+    const whats = getCfg('whatsapp_gerente','');
+    if (whats) {
+      html += `<button onclick="enviarAlertaWhatsApp()" style="width:100%;padding:16px;border-radius:14px;border:none;background:#25D366;color:white;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.103 1.51 5.836L.057 23.455a.5.5 0 00.488.607l5.788-1.517A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.744-.524-5.293-1.432l-.379-.224-3.932 1.031 1.05-3.833-.247-.394A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Avisar Gerente pelo WhatsApp
+      </button>`;
+    }
+  }
   document.getElementById('alertas-list').innerHTML = html;
 }
 
@@ -1088,11 +1100,51 @@ function confirmEntradaRapida() {
 }
 
 // ============================================================
+// WHATSAPP ALERTA
+// ============================================================
+function enviarAlertaWhatsApp() {
+  const whats = getCfg('whatsapp_gerente','');
+  if (!whats) { toast('Configure o WhatsApp da gerente em Ajustes', 'red'); return; }
+  const empresa = getCfg('empresa','Emagrecentro Araruama');
+  const alertDays = getCfg('alerta_validade_dias', 90);
+
+  const baixo = db.produtos.filter(p=>getEstoque(p.codigo)<getMinimo(p.codigo));
+  const venc = db.lotes.filter(l=>l.quantidade>0 && daysUntil(l.validade)<=alertDays)
+    .sort((a,b)=>a.validade>b.validade?1:-1);
+
+  let msg = `⚠️ *Alerta de Estoque — ${empresa}*\n`;
+  msg += `📅 ${new Date().toLocaleDateString('pt-BR')}\n\n`;
+
+  if (baixo.length) {
+    msg += `📉 *ESTOQUE BAIXO (${baixo.length} produto${baixo.length>1?'s':''})* \n`;
+    baixo.forEach(p=>{
+      msg += `• ${p.nome}: ${getEstoque(p.codigo)} un (mín. ${getMinimo(p.codigo)})\n`;
+    });
+    msg += '\n';
+  }
+
+  if (venc.length) {
+    msg += `⏰ *PRÓXIMOS AO VENCIMENTO (${venc.length} lote${venc.length>1?'s':''})* \n`;
+    venc.forEach(l=>{
+      const p = db.produtos.find(x=>x.codigo===l.codigo);
+      const dias = daysUntil(l.validade);
+      msg += `• ${p?p.nome:l.codigo}: ${l.quantidade} un — vence em ${dias} dia${dias!==1?'s':''} (${formatDate(l.validade)})\n`;
+    });
+  }
+
+  if (!baixo.length && !venc.length) {
+    toast('Nenhum alerta para enviar!', 'green'); return;
+  }
+
+  const url = `https://wa.me/${whats}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function init() {
-  // Update header with company name
-  const emp = getCfg('empresa', 'EMAGRENTRO ARARUAMA');
+  const emp = getCfg('empresa', 'Emagrecentro Araruama');
   document.getElementById('header-sub').textContent = emp.toUpperCase();
   renderProdutos();
 }
