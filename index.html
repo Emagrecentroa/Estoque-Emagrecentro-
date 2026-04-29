@@ -470,7 +470,10 @@
 <div class="modal-overlay" id="modal-produto-detalhe" onclick="closeModalOutside(event,'modal-produto-detalhe')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h2 id="det-nome">Produto</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <h2 id="det-nome">Produto</h2>
+      <button onclick="openEditarProduto()" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--navy);cursor:pointer">✏️ Editar</button>
+    </div>
     <div style="font-size:13px;color:var(--gray);margin-bottom:16px" id="det-codigo"></div>
     <div class="section-title">Lotes em estoque</div>
     <div id="det-lotes" class="lotes-list"></div>
@@ -543,6 +546,50 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- MODAL EDITAR LOTE -->
+<div class="modal-overlay" id="modal-editar-lote" onclick="closeModalOutside(event,'modal-editar-lote')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>✏️ Editar Lote</h2>
+    <div style="font-weight:800;font-size:15px;margin-bottom:16px;color:var(--gray)" id="el-nome"></div>
+    <div class="form-group">
+      <label class="form-label">Quantidade correta</label>
+      <input class="form-input" id="el-qty" type="number" min="0" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Validade</label>
+      <input class="form-input" id="el-validade" type="date">
+    </div>
+    <input type="hidden" id="el-id">
+    <button class="btn-confirm" onclick="confirmarEditarLote()">✅ Salvar alteração</button>
+    <button style="width:100%;padding:14px;border-radius:14px;border:none;background:#fff0f0;color:var(--red);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px" onclick="excluirLote()">🗑️ Excluir este lote</button>
+    <button class="btn-cancel" onclick="closeModal('modal-editar-lote')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRODUTO -->
+<div class="modal-overlay" id="modal-editar-produto" onclick="closeModalOutside(event,'modal-editar-produto')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>✏️ Editar Produto</h2>
+    <div class="form-group">
+      <label class="form-label">Nome do produto</label>
+      <input class="form-input" id="ep-nome" type="text">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Código de barras <span style="font-weight:600;color:var(--gray);font-size:10px">(opcional)</span></label>
+      <input class="form-input" id="ep-codigo" type="text">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Estoque mínimo</label>
+      <input class="form-input" id="ep-min" type="number">
+    </div>
+    <button class="btn-confirm" onclick="confirmarEditarProduto()">✅ Salvar alteração</button>
+    <button style="width:100%;padding:14px;border-radius:14px;border:none;background:#fff0f0;color:var(--red);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px" onclick="excluirProduto()">🗑️ Excluir produto</button>
+    <button class="btn-cancel" onclick="closeModal('modal-editar-produto')">Cancelar</button>
+  </div>
+</div>
 
 
 <script>
@@ -741,11 +788,12 @@ function renderLotes() {
   }
   document.getElementById('det-lotes').innerHTML = lotes.map(l=>`
     <div class="lote-row">
-      <div>
+      <div style="flex:1">
         <div class="lote-qty">${l.quantidade} un</div>
         <div class="lote-val">Val: ${formatDate(l.validade)}</div>
         <div class="lote-val" style="font-size:10px">Entrada: ${formatDateTime(l.data_entrada)}</div>
       </div>
+      <button onclick="openEditarLote(${l.id})" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--navy);cursor:pointer;flex-shrink:0">✏️ Editar</button>
     </div>
   `).join('');
 }
@@ -840,16 +888,31 @@ function renderHistorico() {
     list.innerHTML = '<div class="empty-state"><p>Sem registros</p></div>';
     return;
   }
-  list.innerHTML = items.slice(0,100).map(h=>`
-    <div class="hist-card ${h.tipo}">
-      <div class="hist-icon">${h.tipo==='entrada'?'📦':'📤'}</div>
-      <div class="hist-info">
+  list.innerHTML = items.slice(0,100).map((h,i)=>{
+    const idx = db.historico.indexOf(h);
+    return `<div class="hist-card ${h.tipo}" style="align-items:flex-start">
+      <div class="hist-icon" style="margin-top:2px">${h.tipo==='entrada'?'📦':'📤'}</div>
+      <div class="hist-info" style="flex:1">
         <div class="hist-name">${h.nome}</div>
-        <div class="hist-date">${formatDateTime(h.data)}</div>
+        <div class="hist-date">${formatDateTime(h.data)}${h.ajuste?' · ajuste manual':''}</div>
       </div>
-      <div class="hist-qty ${h.tipo}">${h.tipo==='entrada'?'+':'-'}${h.qty}</div>
-    </div>
-  `).join('');
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <div class="hist-qty ${h.tipo}">${h.tipo==='entrada'?'+':'-'}${h.qty}</div>
+        <button onclick="excluirHistorico(${idx})" style="background:#fff0f0;border:none;border-radius:8px;padding:4px 10px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--red);cursor:pointer">🗑️ Apagar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function excluirHistorico(idx) {
+  const h = db.historico[idx];
+  if (!h) return;
+  const acao = h.tipo === 'entrada' ? 'entrada' : 'saída';
+  if (!confirm(`Apagar registro de ${acao} de ${h.qty} un de "${h.nome}"?\n\nIsso NÃO reverte o estoque — apenas apaga o registro do histórico.`)) return;
+  db.historico.splice(idx, 1);
+  saveDB(db);
+  renderHistorico();
+  toast('🗑️ Registro apagado', '');
 }
 
 // ============================================================
@@ -1097,6 +1160,107 @@ function confirmEntradaRapida() {
   closeModal('modal-entrada-rapida');
   toast('✅ Entrada registrada!', 'green');
   renderProdutos();
+}
+
+// ============================================================
+// EDITAR / EXCLUIR LOTE
+// ============================================================
+let editLoteId = null;
+
+function openEditarLote(id) {
+  const lote = db.lotes.find(l=>l.id===id);
+  if (!lote) return;
+  editLoteId = id;
+  document.getElementById('el-nome').textContent = currentProduto.nome;
+  document.getElementById('el-qty').value = lote.quantidade;
+  document.getElementById('el-validade').value = lote.validade;
+  document.getElementById('el-id').value = id;
+  openModal('modal-editar-lote');
+}
+
+function confirmarEditarLote() {
+  const lote = db.lotes.find(l=>l.id===editLoteId);
+  if (!lote) return;
+  const qty = parseInt(document.getElementById('el-qty').value);
+  const val = document.getElementById('el-validade').value;
+  if (isNaN(qty) || qty < 0) { toast('Quantidade inválida', 'red'); return; }
+  if (!val) { toast('Informe a validade', 'red'); return; }
+  const diff = qty - lote.quantidade;
+  lote.quantidade = qty;
+  lote.validade = val;
+  if (diff !== 0) {
+    registrarHistorico(diff > 0 ? 'entrada' : 'saida', lote.codigo, currentProduto.nome, Math.abs(diff));
+    const tipo = diff > 0 ? 'entrada' : 'saída';
+    // Mark as ajuste in historico
+    if (db.historico && db.historico[0]) db.historico[0].ajuste = true;
+  }
+  saveDB(db);
+  closeModal('modal-editar-lote');
+  renderLotes();
+  renderProdutos();
+  toast('✅ Lote atualizado!', 'green');
+}
+
+function excluirLote() {
+  if (!confirm('Excluir este lote? Isso não pode ser desfeito.')) return;
+  const idx = db.lotes.findIndex(l=>l.id===editLoteId);
+  if (idx === -1) return;
+  const lote = db.lotes[idx];
+  registrarHistorico('saida', lote.codigo, currentProduto.nome, lote.quantidade);
+  if (db.historico && db.historico[0]) db.historico[0].ajuste = true;
+  db.lotes.splice(idx, 1);
+  saveDB(db);
+  closeModal('modal-editar-lote');
+  renderLotes();
+  renderProdutos();
+  toast('🗑️ Lote excluído', '');
+}
+
+// ============================================================
+// EDITAR / EXCLUIR PRODUTO
+// ============================================================
+function openEditarProduto() {
+  if (!currentProduto) return;
+  document.getElementById('ep-nome').value = currentProduto.nome;
+  document.getElementById('ep-codigo').value = currentProduto.codigo.startsWith('PROD_') ? '' : currentProduto.codigo;
+  document.getElementById('ep-min').value = currentProduto.estoque_minimo || '';
+  closeModal('modal-produto-detalhe');
+  openModal('modal-editar-produto');
+}
+
+function confirmarEditarProduto() {
+  const nome = document.getElementById('ep-nome').value.trim();
+  let codigo = document.getElementById('ep-codigo').value.trim();
+  const min = parseInt(document.getElementById('ep-min').value) || getCfg('estoque_minimo_padrao', 30);
+  if (!nome) { toast('Informe o nome', 'red'); return; }
+  if (!codigo) codigo = currentProduto.codigo; // keep existing
+  // If codigo changed, check conflict
+  if (codigo !== currentProduto.codigo && db.produtos.find(p=>p.codigo===codigo)) {
+    toast('Esse código já existe em outro produto', 'red'); return;
+  }
+  // Update all lotes with old codigo if codigo changed
+  if (codigo !== currentProduto.codigo) {
+    db.lotes.filter(l=>l.codigo===currentProduto.codigo).forEach(l=>l.codigo=codigo);
+    db.historico && db.historico.filter(h=>h.codigo===currentProduto.codigo).forEach(h=>h.codigo=codigo);
+  }
+  currentProduto.nome = nome;
+  currentProduto.codigo = codigo;
+  currentProduto.estoque_minimo = min;
+  saveDB(db);
+  closeModal('modal-editar-produto');
+  renderProdutos();
+  toast('✅ Produto atualizado!', 'green');
+}
+
+function excluirProduto() {
+  if (!confirm(`Excluir "${currentProduto.nome}" e todos os seus lotes? Não pode ser desfeito.`)) return;
+  db.lotes = db.lotes.filter(l=>l.codigo!==currentProduto.codigo);
+  db.produtos = db.produtos.filter(p=>p.codigo!==currentProduto.codigo);
+  saveDB(db);
+  closeModal('modal-editar-produto');
+  currentProduto = null;
+  renderProdutos();
+  toast('🗑️ Produto excluído', '');
 }
 
 // ============================================================
