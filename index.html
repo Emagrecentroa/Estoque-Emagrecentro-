@@ -2,84 +2,42 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1f3d">
 <title>Estoque - Emagrecentro Araruama</title>
 <script>
-if('serviceWorker'in navigator){const sw=`const CACHE='emag-v6';self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([location.pathname||'/'])));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(c=>{if(c)return c;return fetch(e.request).then(r=>{if(r&&r.status===200){const cl=r.clone();caches.open(CACHE).then(ca=>ca.put(e.request,cl));}return r;}).catch(()=>c);}));});`;const blob=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});}
+if('serviceWorker'in navigator){const sw=`const C='emag-v10';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll([location.pathname||'/'])));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(c=>{if(c)return c;return fetch(e.request).then(r=>{if(r&&r.status===200){const cl=r.clone();caches.open(C).then(ca=>ca.put(e.request,cl));}return r;}).catch(()=>c);}));});`;const b=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(b)).catch(()=>{});}
 </script>
 <style>
-:root{
-  --navy:#0f1f3d;--pink:#e8186d;--bg:#f0f2f7;--white:#fff;
-  --gray:#8892a4;--gl:#e8ecf4;--text:#1a2a4a;
-  --orange:#ff6b2b;--green:#00c57a;--red:#e8186d;
-  --shadow:0 4px 20px rgba(15,31,61,.10);--r:16px;
-  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-}
+:root{--navy:#0f1f3d;--pink:#e8186d;--bg:#f0f2f7;--white:#fff;--gray:#8892a4;--gl:#e8ecf4;--text:#1a2a4a;--orange:#ff6b2b;--green:#00c57a;--red:#e8186d;--shadow:0 4px 20px rgba(15,31,61,.10);--r:16px;--f:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px;}
-
-/* LOCK */
-#lock{position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px;}
-#lock .logo{font-size:52px;}
-#lock h1{color:#fff;font-size:22px;font-weight:900;text-align:center;line-height:1.2;}
-#lock p{color:rgba(255,255,255,.5);font-size:13px;}
-.pin-dots{display:flex;gap:14px;}
-.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.3);}
-.pin-dot.on{background:var(--pink);border-color:var(--pink);}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:260px;}
-.pk{padding:18px;border-radius:14px;border:none;background:rgba(255,255,255,.1);color:#fff;font-family:var(--font);font-size:20px;font-weight:700;cursor:pointer;}
-.pk:active{background:rgba(255,255,255,.25);}
-.pk.del{background:rgba(232,24,109,.3);}
-.pk.ok{background:var(--pink);}
-#pin-err{color:var(--pink);font-size:13px;font-weight:700;min-height:18px;}
-.btn-skip{background:none;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.5);font-family:var(--font);font-size:12px;padding:8px 16px;border-radius:10px;cursor:pointer;margin-top:4px;}
-
-/* HEADER */
+body{font-family:var(--f);background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px;}
 .hdr{background:var(--navy);color:#fff;padding:20px 20px 16px;position:sticky;top:0;z-index:100;}
 .hdr-sub{font-size:11px;font-weight:700;letter-spacing:1.5px;opacity:.55;text-transform:uppercase;}
 .hdr-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
 .hdr h1{font-size:26px;font-weight:900;}
 .btn-add{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-/* TABS */
 .tabs{display:flex;background:var(--white);border-top:1px solid var(--gl);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;}
-.tab{flex:1;padding:9px 2px 11px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gray);font-family:var(--font);font-size:9px;font-weight:700;letter-spacing:.3px;}
+.tab{flex:1;padding:9px 2px 11px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gray);font-family:var(--f);font-size:9px;font-weight:700;}
 .tab.active{color:var(--navy);}
 .tab svg{width:22px;height:22px;}
 .tw{position:relative;display:flex;flex-direction:column;align-items:center;}
 .badge{position:absolute;top:-4px;right:-10px;background:var(--pink);color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-
-/* PAGES */
 .page{display:none;padding:20px;}
 .page.active{display:block;}
-
-/* STAT GRID */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
 .sc{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);}
 .sc .lbl{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--gray);text-transform:uppercase;}
 .sc .val{font-size:30px;font-weight:900;color:var(--text);margin-top:4px;line-height:1;}
-.val.or{color:var(--orange);}.val.re{color:var(--red);}.val.gr{color:var(--green);}
-
-/* BUTTONS */
-.abtn{width:100%;padding:17px;border-radius:var(--r);border:none;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:11px;}
-.navy{background:var(--navy);color:#fff;}
-.pink{background:var(--pink);color:#fff;}
-.grn{background:var(--green);color:#fff;}
-.org{background:var(--orange);color:#fff;}
-
-/* SEARCH */
+.val.or{color:var(--orange);}
+.abtn{width:100%;padding:17px;border-radius:var(--r);border:none;font-family:var(--f);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:11px;}
+.navy{background:var(--navy);color:#fff;}.pink{background:var(--pink);color:#fff;}
 .srch{position:relative;margin-bottom:12px;}
 .srch svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray);}
-.srch input{width:100%;padding:14px 14px 14px 42px;border-radius:var(--r);border:none;background:var(--white);font-family:var(--font);font-size:14px;color:var(--text);box-shadow:var(--shadow);}
+.srch input{width:100%;padding:14px 14px 14px 42px;border-radius:var(--r);border:none;background:var(--white);font-family:var(--f);font-size:14px;color:var(--text);box-shadow:var(--shadow);}
 .srch input:focus{outline:2px solid var(--navy);}
-
-/* SECTION TITLE */
 .stitle{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;margin-bottom:12px;margin-top:4px;}
-
-/* PRODUCT CARD */
 .pc{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .1s;}
 .pc:active{transform:scale(.98);}
 .pico{width:52px;height:52px;border-radius:12px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--navy);flex-shrink:0;overflow:hidden;}
@@ -91,51 +49,37 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .pqty .q{font-size:22px;font-weight:900;}
 .pqty .u{font-size:10px;color:var(--gray);font-weight:700;}
 .pqty.low .q{color:var(--orange);}.pqty.crit .q{color:var(--red);}
-
-/* MODAL */
 .mo{position:fixed;inset:0;background:rgba(15,31,61,.6);z-index:300;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s;}
 .mo.open{opacity:1;pointer-events:all;}
 .md{background:var(--white);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;margin:0 auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto;}
 .mo.open .md{transform:translateY(0);}
 .mh{width:40px;height:4px;background:var(--gl);border-radius:2px;margin:0 auto 20px;}
 .md h2{font-size:20px;font-weight:900;margin-bottom:16px;}
-
-/* FORM */
 .fg{margin-bottom:14px;}
 .fl{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;display:block;}
-.fi{width:100%;padding:14px 16px;border-radius:12px;border:2px solid var(--gl);font-family:var(--font);font-size:15px;color:var(--text);background:var(--bg);}
+.fi{width:100%;padding:14px 16px;border-radius:12px;border:2px solid var(--gl);font-family:var(--f);font-size:15px;color:var(--text);background:var(--bg);}
 .fi:focus{outline:none;border-color:var(--navy);}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.bc{width:100%;padding:16px;border-radius:14px;border:none;background:var(--navy);color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-top:8px;}
+.bc{width:100%;padding:16px;border-radius:14px;border:none;background:var(--navy);color:#fff;font-family:var(--f);font-size:16px;font-weight:800;cursor:pointer;margin-top:8px;}
 .bc.pk{background:var(--pink);}
-.bca{width:100%;padding:14px;border-radius:14px;border:2px solid var(--gl);background:none;color:var(--gray);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
-.bdel{width:100%;padding:14px;border-radius:14px;border:none;background:#fff0f0;color:var(--red);font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;}
-.bout{width:100%;padding:14px;border-radius:14px;border:2px solid var(--gl);background:none;color:var(--text);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
-
-/* LOTES */
+.bca{width:100%;padding:14px;border-radius:14px;border:2px solid var(--gl);background:none;color:var(--gray);font-family:var(--f);font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
+.bdel{width:100%;padding:14px;border-radius:14px;border:none;background:#fff0f0;color:var(--red);font-family:var(--f);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;}
+.bout{width:100%;padding:14px;border-radius:14px;border:2px solid var(--gl);background:none;color:var(--text);font-family:var(--f);font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
 .lr{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-
-/* ALERTS */
 .ac{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:10px;border-left:4px solid transparent;display:flex;align-items:center;gap:14px;cursor:pointer;}
 .ac.or{border-left-color:var(--orange);}.ac.re{border-left-color:var(--red);}
-
-/* SETTINGS */
 .ss{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:16px;}
 .ss h3{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;margin-bottom:14px;}
 .sr{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gl);}
 .sr:last-child{border-bottom:none;}
 .sr label{font-size:14px;font-weight:700;}
-.si{width:160px;padding:10px 12px;border-radius:10px;border:2px solid var(--gl);font-family:var(--font);font-size:14px;text-align:right;background:var(--bg);}
+.si{width:160px;padding:10px 12px;border-radius:10px;border:2px solid var(--gl);font-family:var(--f);font-size:14px;text-align:right;background:var(--bg);}
 .si:focus{outline:none;border-color:var(--navy);}
-
-/* HISTORY */
 .hf{display:flex;gap:8px;margin-bottom:14px;}
-.hf button{flex:1;padding:10px;border-radius:10px;border:2px solid var(--gl);background:none;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;color:var(--gray);}
+.hf button{flex:1;padding:10px;border-radius:10px;border:2px solid var(--gl);background:none;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer;color:var(--gray);}
 .hf button.active{background:var(--navy);border-color:var(--navy);color:#fff;}
 .hcard{background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--shadow);margin-bottom:8px;border-left:4px solid transparent;display:flex;align-items:flex-start;gap:12px;}
 .hcard.entrada{border-left-color:var(--green);}.hcard.saida{border-left-color:var(--pink);}
-
-/* CHART */
 .cw{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:16px;}
 .cw h3{font-size:12px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
 .br{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
@@ -143,58 +87,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .bt{flex:1;background:var(--bg);border-radius:6px;height:20px;overflow:hidden;}
 .bf{height:100%;border-radius:6px;background:var(--navy);display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:11px;font-weight:800;color:#fff;min-width:24px;}
 .bf.pk{background:var(--pink);}
-
-/* CAMERA */
-#cam-video{width:100%;border-radius:var(--r);display:block;background:#000;min-height:220px;}
-.cam-wrap{position:relative;margin-bottom:12px;border-radius:var(--r);overflow:hidden;}
-.cam-cross{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-.cam-box{width:200px;height:200px;border:3px solid var(--pink);border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);}
-
-/* PERIODO */
 .ptabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.ptab{padding:8px 14px;border-radius:10px;border:2px solid var(--gl);background:none;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;color:var(--gray);}
+.ptab{padding:8px 14px;border-radius:10px;border:2px solid var(--gl);background:none;font-family:var(--f);font-size:12px;font-weight:700;cursor:pointer;color:var(--gray);}
 .ptab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
-
-/* CHIP */
 .chip{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;}
 .chip.re{background:#fff0f0;color:var(--red);}
-
-/* FOTO */
-.foto-box{width:80px;height:80px;border-radius:12px;border:2px dashed var(--gl);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:28px;background:var(--bg);overflow:hidden;flex-shrink:0;}
-.foto-box img{width:100%;height:100%;object-fit:cover;}
-
-/* TOAST */
+.fbox{width:80px;height:80px;border-radius:12px;border:2px dashed var(--gl);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:28px;background:var(--bg);overflow:hidden;flex-shrink:0;}
+.fbox img{width:100%;height:100%;object-fit:cover;}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;z-index:999;opacity:0;transition:all .3s;white-space:nowrap;max-width:90vw;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.gr{background:var(--green);}.toast.re{background:var(--red);}
-
 .empty{text-align:center;padding:40px 20px;color:var(--gray);}
 .empty .ico{font-size:48px;margin-bottom:12px;}
-.divider{height:1px;background:var(--gl);margin:12px 0;}
+.div{height:1px;background:var(--gl);margin:12px 0;}
 </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
-<div id="lock">
-  <div class="logo">🏪</div>
-  <h1>Emagrecentro<br>Araruama</h1>
-  <p id="lock-sub">Digite sua senha de 4 dígitos</p>
-  <div class="pin-dots">
-    <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
-  </div>
-  <div id="pin-err"></div>
-  <div class="pin-pad">
-    <button class="pk" onclick="pp('1')">1</button><button class="pk" onclick="pp('2')">2</button><button class="pk" onclick="pp('3')">3</button>
-    <button class="pk" onclick="pp('4')">4</button><button class="pk" onclick="pp('5')">5</button><button class="pk" onclick="pp('6')">6</button>
-    <button class="pk" onclick="pp('7')">7</button><button class="pk" onclick="pp('8')">8</button><button class="pk" onclick="pp('9')">9</button>
-    <button class="pk del" onclick="pd()">⌫</button><button class="pk" onclick="pp('0')">0</button><button class="pk ok" onclick="pok()">OK</button>
-  </div>
-  <button class="btn-skip" id="btn-skip" onclick="unlock()">Entrar sem senha</button>
-</div>
-
-<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-sub" id="hdr-sub">EMAGRECENTRO ARARUAMA</div>
   <div class="hdr-row">
@@ -203,17 +112,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<!-- PAGE: ESTOQUE -->
 <div id="page-estoque" class="page active">
   <div class="sg">
     <div class="sc"><div class="lbl">Produtos</div><div class="val" id="s-prod">0</div></div>
     <div class="sc"><div class="lbl">Unidades</div><div class="val" id="s-un">0</div></div>
     <div class="sc"><div class="lbl">Estoque Baixo</div><div class="val or" id="s-baixo">0</div></div>
-    <div class="sc"><div class="lbl">Valor em Estoque</div><div class="val gr" id="s-val" style="font-size:18px;margin-top:8px">R$ --</div></div>
+    <div class="sc"><div class="lbl">Valor Estoque</div><div class="val" id="s-val" style="font-size:18px;margin-top:8px;color:var(--green)">R$ --</div></div>
   </div>
   <button class="abtn navy" onclick="openEntrada()">📦 Entrada Rápida</button>
   <button class="abtn pink" onclick="openSaida()">⚡ Saída Rápida</button>
-  <button class="abtn org" onclick="goTab('camera')">📷 Identificar por Foto (IA)</button>
   <div class="stitle">Produtos Cadastrados</div>
   <div class="srch">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -222,49 +129,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div id="prod-list"></div>
 </div>
 
-<!-- PAGE: CAMERA IA -->
-<div id="page-camera" class="page">
-  <div class="cam-wrap" id="cam-wrap">
-    <video id="cam-video" playsinline muted autoplay></video>
-    <div class="cam-cross"><div class="cam-box"></div></div>
-  </div>
-  <button class="abtn navy" id="cam-start-btn" onclick="startCam()">📷 Iniciar Câmera</button>
-  <button class="abtn pink" id="cam-cap-btn" onclick="captureCam()" style="display:none">🔍 Identificar Produto</button>
-  <div id="cam-loading" style="display:none;text-align:center;padding:24px">
-    <div style="font-size:36px;margin-bottom:8px">🤖</div>
-    <div style="font-weight:700;color:var(--gray)">Identificando produto com IA...</div>
-  </div>
-  <div id="cam-result" style="display:none">
-    <div class="ss">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div id="cr-ico" style="font-size:40px;width:52px;text-align:center;flex-shrink:0"></div>
-        <div>
-          <div style="font-size:17px;font-weight:900" id="cr-nome"></div>
-          <div style="font-size:12px;color:var(--gray)" id="cr-info"></div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button onclick="camAct('entrada')" style="flex:1;padding:14px;border-radius:12px;border:none;background:var(--navy);color:#fff;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer">📦 Entrada</button>
-        <button onclick="camAct('saida')" style="flex:1;padding:14px;border-radius:12px;border:none;background:var(--pink);color:#fff;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer">📤 Saída</button>
-      </div>
-    </div>
-  </div>
-  <label class="bout" style="margin-top:0">
-    🖼️ Usar foto da galeria
-    <input type="file" accept="image/*" style="display:none" onchange="camFile(event)">
-  </label>
-  <div style="margin-top:12px;font-size:12px;color:var(--gray);text-align:center;line-height:1.6">
-    A IA analisa a foto e identifica o produto pelo nome e embalagem.<br>
-    Configure sua chave Anthropic em <strong>Ajustes</strong>.
-  </div>
-</div>
+<div id="page-alertas" class="page"><div id="alert-list"></div></div>
 
-<!-- PAGE: ALERTAS -->
-<div id="page-alertas" class="page">
-  <div id="alert-list"></div>
-</div>
-
-<!-- PAGE: RELATÓRIOS -->
 <div id="page-rel" class="page">
   <div class="ptabs">
     <button class="ptab active" onclick="setPer(7,this)">7 dias</button>
@@ -272,12 +138,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <button class="ptab" onclick="setPer(90,this)">3 meses</button>
     <button class="ptab" onclick="setPer(365,this)">1 ano</button>
   </div>
-  <div class="sg" id="rel-resumo" style="margin-bottom:16px"></div>
-  <div class="cw"><h3>📤 Mais Vendidos</h3><div id="ch-saidas"></div></div>
-  <div class="cw"><h3>📦 Mais Recebidos</h3><div id="ch-entradas"></div></div>
+  <div class="sg" id="rel-res" style="margin-bottom:16px"></div>
+  <div class="cw"><h3>📤 Mais Vendidos</h3><div id="ch-s"></div></div>
+  <div class="cw"><h3>📦 Mais Recebidos</h3><div id="ch-e"></div></div>
   <div class="cw">
     <h3>🛒 Lista de Compras</h3>
-    <div id="lista-compras"></div>
+    <div id="lista-c"></div>
     <button class="bout" style="margin-top:12px" onclick="enviarCompras()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.103 1.51 5.836L.057 23.455a.5.5 0 00.488.607l5.788-1.517A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.744-.524-5.293-1.432l-.379-.224-3.932 1.031 1.05-3.833-.247-.394A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       Enviar para Gerente
@@ -285,7 +151,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<!-- PAGE: AJUSTES -->
 <div id="page-ajustes" class="page">
   <div class="ss"><h3>Identificação</h3>
     <div class="sr"><label>Nome da empresa</label><input class="si" id="cfg-emp" type="text"></div>
@@ -297,15 +162,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="sr"><label>Estoque mínimo padrão</label><input class="si" id="cfg-min" type="number"></div>
     <div class="sr"><label>Avisar validade (dias)</label><input class="si" id="cfg-val" type="number"></div>
   </div>
-  <div class="ss"><h3>🔐 Segurança (PIN)</h3>
-    <div class="sr"><label>Senha (4 dígitos)</label><input class="si" id="cfg-pin" type="password" maxlength="4" placeholder="••••"></div>
-    <div style="font-size:12px;color:var(--gray);margin-top:6px">Deixe em branco para entrar sem senha</div>
-  </div>
-  <div class="ss"><h3>🤖 IA — Reconhecimento por Foto</h3>
-    <div class="sr"><label style="font-size:12px">Chave Anthropic API</label><input class="si" id="cfg-key" type="password" placeholder="sk-ant-..."></div>
-    <div style="font-size:11px;color:var(--gray);margin-top:6px;line-height:1.5">Necessária para identificar produtos por foto. Obtenha gratuitamente em <strong>console.anthropic.com</strong></div>
-  </div>
-  <button style="width:100%;padding:16px;border-radius:14px;border:none;background:var(--navy);color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer" onclick="saveCfg()">💾 Salvar Configurações</button>
+  <button style="width:100%;padding:16px;border-radius:14px;border:none;background:var(--navy);color:#fff;font-family:var(--f);font-size:16px;font-weight:800;cursor:pointer" onclick="saveCfg()">💾 Salvar Configurações</button>
   <div style="margin-top:16px">
     <button class="bout" onclick="exportBk()">📤 Exportar backup JSON</button>
     <label class="bout">📥 Importar backup JSON<input type="file" accept=".json" style="display:none" onchange="importBk(event)"></label>
@@ -321,13 +178,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab active" id="tab-estoque" onclick="goTab('estoque')">
     <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8l-2 4h12l-2-4z"/></svg>Estoque
-  </button>
-  <button class="tab" id="tab-camera" onclick="goTab('camera')">
-    <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Câmera IA
   </button>
   <button class="tab" id="tab-alertas" onclick="goTab('alertas')">
     <div class="tw">
@@ -344,785 +197,421 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <!-- MODALS -->
-
-<!-- ADD PRODUTO -->
-<div class="mo" id="m-add" onclick="closeMO(event,'m-add')"><div class="md">
+<div class="mo" id="m-add" onclick="cMO(event,'m-add')"><div class="md">
   <div class="mh"></div><h2>Novo Produto</h2>
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-    <div class="foto-box" id="add-foto-prev" onclick="document.getElementById('add-foto-inp').click()">📷</div>
-    <div style="font-size:13px;color:var(--gray)">Toque para adicionar foto do produto</div>
-    <input type="file" id="add-foto-inp" accept="image/*" style="display:none" onchange="prevFoto(event,'add-foto-prev','add-foto-b64')">
+    <div class="fbox" id="add-fp" onclick="document.getElementById('add-fi').click()">📷</div>
+    <div style="font-size:13px;color:var(--gray)">Toque para adicionar foto</div>
+    <input type="file" id="add-fi" accept="image/*" style="display:none" onchange="pF(event,'add-fp','add-fb')">
   </div>
-  <input type="hidden" id="add-foto-b64">
+  <input type="hidden" id="add-fb">
   <div class="fg"><label class="fl">Nome do produto *</label><input class="fi" id="add-nome" placeholder="Ex: BEST CRIO"></div>
   <div class="fg"><label class="fl">Código <span style="color:var(--gray);font-size:10px">(opcional)</span></label><input class="fi" id="add-cod" placeholder="Deixe em branco se não tiver"></div>
   <div class="fr">
-    <div class="fg"><label class="fl">Estoque mínimo</label><input class="fi" id="add-min" type="number" placeholder="30"></div>
+    <div class="fg"><label class="fl">Est. mínimo</label><input class="fi" id="add-min" type="number" placeholder="30"></div>
     <div class="fg"><label class="fl">Custo (R$)</label><input class="fi" id="add-preco" type="number" step="0.01" placeholder="0,00"></div>
   </div>
   <button class="bc" onclick="addProd()">Cadastrar produto</button>
   <button class="bca" onclick="closeM('m-add')">Cancelar</button>
 </div></div>
 
-<!-- DETALHE PRODUTO -->
-<div class="mo" id="m-det" onclick="closeMO(event,'m-det')"><div class="md">
+<div class="mo" id="m-det" onclick="cMO(event,'m-det')"><div class="md">
   <div class="mh"></div>
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-    <div class="foto-box" id="det-foto" style="border:none;cursor:default"></div>
+    <div class="fbox" id="det-foto" style="border:none;cursor:default"></div>
     <div style="flex:1">
       <div style="font-size:18px;font-weight:900" id="det-nome"></div>
       <div style="font-size:12px;color:var(--gray);margin-top:3px" id="det-cod"></div>
       <div style="font-size:12px;color:var(--gray)" id="det-preco"></div>
     </div>
-    <button onclick="openEditProd()" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:var(--font);font-size:12px;font-weight:800;color:var(--navy);cursor:pointer;flex-shrink:0">✏️ Editar</button>
+    <button onclick="openEP()" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:var(--f);font-size:12px;font-weight:800;color:var(--navy);cursor:pointer;flex-shrink:0">✏️ Editar</button>
   </div>
   <div class="stitle">Lotes em estoque</div>
   <div id="det-lotes"></div>
-  <div class="divider"></div>
-  <button class="bc" onclick="openMovDet('entrada')">📦 Registrar Entrada</button>
-  <button class="bc pk" style="margin-top:8px" onclick="openMovDet('saida')">📤 Registrar Saída</button>
+  <div class="div" style="height:1px;background:var(--gl);margin:12px 0"></div>
+  <button class="bc" onclick="openMov('entrada')">📦 Registrar Entrada</button>
+  <button class="bc pk" style="margin-top:8px" onclick="openMov('saida')">📤 Registrar Saída</button>
   <button class="bca" onclick="closeM('m-det')">Fechar</button>
 </div></div>
 
-<!-- MOVIMENTAÇÃO -->
-<div class="mo" id="m-mov" onclick="closeMO(event,'m-mov')"><div class="md">
+<div class="mo" id="m-mov" onclick="cMO(event,'m-mov')"><div class="md">
   <div class="mh"></div>
-  <h2 id="mov-title">Registrar Entrada</h2>
-  <div style="font-weight:800;font-size:16px;margin-bottom:2px" id="mov-nome"></div>
-  <div style="font-size:13px;color:var(--gray);margin-bottom:16px" id="mov-atual"></div>
-  <div class="fg" id="mov-val-grp"><label class="fl">Validade</label><input class="fi" id="mov-val" type="date"></div>
-  <div class="fg"><label class="fl">Quantidade</label><input class="fi" id="mov-qty" type="number" min="1" placeholder="1" oninput="movPreview()"></div>
-  <div id="mov-prev" style="background:var(--bg);border-radius:10px;padding:12px;font-size:13px;font-weight:700;color:var(--gray);display:none;margin-bottom:4px"></div>
+  <h2 id="mov-t">Registrar Entrada</h2>
+  <div style="font-weight:800;font-size:16px;margin-bottom:2px" id="mov-n"></div>
+  <div style="font-size:13px;color:var(--gray);margin-bottom:16px" id="mov-a"></div>
+  <div class="fg" id="mov-vg"><label class="fl">Validade</label><input class="fi" id="mov-v" type="date"></div>
+  <div class="fg"><label class="fl">Quantidade</label><input class="fi" id="mov-q" type="number" min="1" placeholder="1" oninput="movPrev()"></div>
+  <div id="mov-p" style="background:var(--bg);border-radius:10px;padding:12px;font-size:13px;font-weight:700;color:var(--gray);display:none;margin-bottom:4px"></div>
   <button class="bc" id="mov-btn" onclick="confirmMov()">Confirmar</button>
   <button class="bca" onclick="closeM('m-mov')">Cancelar</button>
 </div></div>
 
-<!-- ENTRADA RÁPIDA -->
-<div class="mo" id="m-entrada" onclick="closeMO(event,'m-entrada')"><div class="md">
+<div class="mo" id="m-entrada" onclick="cMO(event,'m-entrada')"><div class="md">
   <div class="mh"></div><h2>📦 Entrada Rápida</h2>
-  <div class="fg"><label class="fl">Produto</label><input class="fi" id="er-s" placeholder="Digite o nome..." oninput="renderRapList('er')"></div>
+  <div class="fg"><label class="fl">Produto</label><input class="fi" id="er-s" placeholder="Digite o nome..." oninput="rapList('er')"></div>
   <div id="er-list" style="max-height:180px;overflow-y:auto;margin-bottom:12px"></div>
   <div class="fr">
     <div class="fg"><label class="fl">Quantidade</label><input class="fi" id="er-qty" type="number" min="1" value="1"></div>
     <div class="fg"><label class="fl">Validade</label><input class="fi" id="er-val" type="date"></div>
   </div>
-  <button class="bc" onclick="confEntrada()">Confirmar Entrada</button>
+  <button class="bc" onclick="confE()">Confirmar Entrada</button>
   <button class="bca" onclick="closeM('m-entrada')">Cancelar</button>
 </div></div>
 
-<!-- SAÍDA RÁPIDA -->
-<div class="mo" id="m-saida" onclick="closeMO(event,'m-saida')"><div class="md">
+<div class="mo" id="m-saida" onclick="cMO(event,'m-saida')"><div class="md">
   <div class="mh"></div><h2>⚡ Saída Rápida</h2>
-  <div class="fg"><label class="fl">Produto</label><input class="fi" id="sr-s" placeholder="Digite o nome..." oninput="renderRapList('sr')"></div>
+  <div class="fg"><label class="fl">Produto</label><input class="fi" id="sr-s" placeholder="Digite o nome..." oninput="rapList('sr')"></div>
   <div id="sr-list" style="max-height:180px;overflow-y:auto;margin-bottom:12px"></div>
   <div class="fg"><label class="fl">Quantidade</label><input class="fi" id="sr-qty" type="number" min="1" value="1"></div>
-  <button class="bc pk" onclick="confSaida()">Confirmar Saída</button>
+  <button class="bc pk" onclick="confS()">Confirmar Saída</button>
   <button class="bca" onclick="closeM('m-saida')">Cancelar</button>
 </div></div>
 
-<!-- EDITAR LOTE -->
-<div class="mo" id="m-elote" onclick="closeMO(event,'m-elote')"><div class="md">
+<div class="mo" id="m-el" onclick="cMO(event,'m-el')"><div class="md">
   <div class="mh"></div><h2>✏️ Editar Lote</h2>
-  <div style="font-weight:800;font-size:14px;color:var(--gray);margin-bottom:16px" id="el-nome"></div>
+  <div style="font-weight:800;font-size:14px;color:var(--gray);margin-bottom:16px" id="el-n"></div>
   <div class="fg"><label class="fl">Quantidade correta</label><input class="fi" id="el-qty" type="number" min="0"></div>
   <div class="fg"><label class="fl">Validade</label><input class="fi" id="el-val" type="date"></div>
-  <button class="bc" onclick="confEditLote()">✅ Salvar</button>
+  <button class="bc" onclick="confEL()">✅ Salvar</button>
   <button class="bdel" onclick="delLote()">🗑️ Excluir este lote</button>
-  <button class="bca" onclick="closeM('m-elote')">Cancelar</button>
+  <button class="bca" onclick="closeM('m-el')">Cancelar</button>
 </div></div>
 
-<!-- EDITAR PRODUTO -->
-<div class="mo" id="m-eprod" onclick="closeMO(event,'m-eprod')"><div class="md">
+<div class="mo" id="m-ep" onclick="cMO(event,'m-ep')"><div class="md">
   <div class="mh"></div><h2>✏️ Editar Produto</h2>
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-    <div class="foto-box" id="ep-foto-prev" onclick="document.getElementById('ep-foto-inp').click()">📷</div>
+    <div class="fbox" id="ep-fp" onclick="document.getElementById('ep-fi').click()">📷</div>
     <div style="font-size:13px;color:var(--gray)">Toque para trocar a foto</div>
-    <input type="file" id="ep-foto-inp" accept="image/*" style="display:none" onchange="prevFoto(event,'ep-foto-prev','ep-foto-b64')">
+    <input type="file" id="ep-fi" accept="image/*" style="display:none" onchange="pF(event,'ep-fp','ep-fb')">
   </div>
-  <input type="hidden" id="ep-foto-b64">
+  <input type="hidden" id="ep-fb">
   <div class="fg"><label class="fl">Nome *</label><input class="fi" id="ep-nome"></div>
   <div class="fg"><label class="fl">Código <span style="color:var(--gray);font-size:10px">(opcional)</span></label><input class="fi" id="ep-cod"></div>
   <div class="fr">
-    <div class="fg"><label class="fl">Estoque mínimo</label><input class="fi" id="ep-min" type="number"></div>
+    <div class="fg"><label class="fl">Est. mínimo</label><input class="fi" id="ep-min" type="number"></div>
     <div class="fg"><label class="fl">Custo (R$)</label><input class="fi" id="ep-preco" type="number" step="0.01"></div>
   </div>
-  <button class="bc" onclick="confEditProd()">✅ Salvar</button>
+  <button class="bc" onclick="confEP()">✅ Salvar</button>
   <button class="bdel" onclick="delProd()">🗑️ Excluir produto</button>
-  <button class="bca" onclick="closeM('m-eprod')">Cancelar</button>
+  <button class="bca" onclick="closeM('m-ep')">Cancelar</button>
 </div></div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
-// DB
-// ═══════════════════════════════════════
-const DB_KEY='emag_db';
-function loadDB(){try{const r=localStorage.getItem(DB_KEY);if(r)return JSON.parse(r);}catch(e){}return{produtos:[],lotes:[],config:[],hist:[],nid:1};}
-function sDB(d){localStorage.setItem(DB_KEY,JSON.stringify(d));}
-let db=loadDB();
+const DK='emag_db';
+function lDB(){try{const r=localStorage.getItem(DK);if(r)return JSON.parse(r);}catch(e){}return{produtos:[],lotes:[],config:[],hist:[],nid:1};}
+function sDB(d){localStorage.setItem(DK,JSON.stringify(d));}
+let db=lDB();
 if(!db.hist)db.hist=[];
 if(!db.nid)db.nid=Math.max(1,...(db.lotes||[]).map(l=>l.id||0))+1;
-
 function gc(k,d=''){const c=db.config.find(x=>x.key===k);return c!==undefined?c.value:d;}
 function sc(k,v){const c=db.config.find(x=>x.key===k);if(c)c.value=v;else db.config.push({key:k,value:v});}
-function getEst(cod){return db.lotes.filter(l=>l.codigo===cod).reduce((s,l)=>s+l.quantidade,0);}
-function getMin(cod){const p=db.produtos.find(x=>x.codigo===cod);return p?(p.estoque_minimo||gc('min_padrao',30)):30;}
-function fmtD(d){if(!d)return'';return new Date(d+'T12:00:00').toLocaleDateString('pt-BR');}
-function fmtDT(d){if(!d)return'';return new Date(d).toLocaleString('pt-BR');}
-function days(d){const t=new Date();t.setHours(0,0,0,0);return Math.floor((new Date(d+'T12:00:00')-t)/86400000);}
+function gE(c){return db.lotes.filter(l=>l.codigo===c).reduce((s,l)=>s+l.quantidade,0);}
+function gM(c){const p=db.produtos.find(x=>x.codigo===c);return p?(p.estoque_minimo||gc('min_p',30)):30;}
+function fD(d){if(!d)return'';return new Date(d+'T12:00:00').toLocaleDateString('pt-BR');}
+function fDT(d){if(!d)return'';return new Date(d).toLocaleString('pt-BR');}
+function dy(d){const t=new Date();t.setHours(0,0,0,0);return Math.floor((new Date(d+'T12:00:00')-t)/86400000);}
 function ini(n){return n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
-function fmtR(v){return'R$ '+parseFloat(v||0).toFixed(2).replace('.',',');}
+function fR(v){return'R$ '+parseFloat(v||0).toFixed(2).replace('.',',');}
 
-// ═══════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════
-function toast(msg,t=''){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.className='toast show '+(t||'');
-  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',2500);
-}
-
-// ═══════════════════════════════════════
-// PIN / LOCK
-// ═══════════════════════════════════════
-let pinBuf='';
-function updDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).className='pin-dot'+(i<pinBuf.length?' on':'');}
-function pp(d){if(pinBuf.length<4){pinBuf+=d;updDots();if(pinBuf.length===4)setTimeout(pok,200);}}
-function pd(){pinBuf=pinBuf.slice(0,-1);updDots();}
-function pok(){
-  const saved=gc('pin','');
-  if(!saved){unlock();return;}
-  if(pinBuf===saved){unlock();}
-  else{document.getElementById('pin-err').textContent='Senha incorreta';pinBuf='';updDots();setTimeout(()=>document.getElementById('pin-err').textContent='',1500);}
-}
-function unlock(){document.getElementById('lock').style.display='none';appInit();}
-
-window.addEventListener('load',()=>{
-  const p=gc('pin','');
-  if(!p){document.getElementById('lock-sub').textContent='Sem senha configurada';document.getElementById('btn-skip').style.display='';}
-  else{document.getElementById('btn-skip').style.display='none';}
-});
-
-// ═══════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════
-let curTab='estoque';
-let camStream=null;
+function toast(msg,t=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+(t||'');clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',2500);}
 
 function goTab(tab){
-  if(curTab==='camera'&&tab!=='camera')stopCam();
-  curTab=tab;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
-  const tel=document.getElementById('tab-'+tab);if(tel)tel.classList.add('active');
-  const titles={estoque:'Estoque',camera:'Câmera IA',alertas:'Alertas',rel:'Relatórios',ajustes:'Ajustes'};
-  document.getElementById('hdr-title').textContent=titles[tab]||tab;
+  const te=document.getElementById('tab-'+tab);if(te)te.classList.add('active');
+  const tt={estoque:'Estoque',alertas:'Alertas',rel:'Relatórios',ajustes:'Ajustes'};
+  document.getElementById('hdr-title').textContent=tt[tab]||tab;
   document.getElementById('btn-add').style.display=tab==='estoque'?'':'none';
   if(tab==='estoque')renderProds();
   if(tab==='alertas')renderAlertas();
   if(tab==='ajustes'){renderCfg();renderHist();}
   if(tab==='rel')renderRel();
 }
-
 function openM(id){document.getElementById(id).classList.add('open');}
 function closeM(id){document.getElementById(id).classList.remove('open');}
-function closeMO(e,id){if(e.target===document.getElementById(id))closeM(id);}
+function cMO(e,id){if(e.target===document.getElementById(id))closeM(id);}
 
-// ═══════════════════════════════════════
-// RENDER PRODUTOS
-// ═══════════════════════════════════════
 function renderProds(){
   const q=(document.querySelector('#page-estoque .srch input')||{value:''}).value.toLowerCase();
   let list=db.produtos.filter(p=>p.nome.toLowerCase().includes(q)||(p.codigo||'').includes(q));
-  list.sort((a,b)=>{
-    const ea=getEst(a.codigo),eb=getEst(b.codigo),ma=getMin(a.codigo),mb=getMin(b.codigo);
-    if(ea<ma&&eb>=mb)return -1;if(eb<mb&&ea>=ma)return 1;
-    return a.nome.localeCompare(b.nome);
-  });
+  list.sort((a,b)=>{const ea=gE(a.codigo),eb=gE(b.codigo),ma=gM(a.codigo),mb=gM(b.codigo);if(ea<ma&&eb>=mb)return -1;if(eb<mb&&ea>=ma)return 1;return a.nome.localeCompare(b.nome);});
   const el=document.getElementById('prod-list');
   if(!list.length){el.innerHTML='<div class="empty"><div class="ico">📦</div><p>Nenhum produto encontrado</p></div>';return;}
   el.innerHTML=list.map(p=>{
-    const est=getEst(p.codigo),min=getMin(p.codigo);
-    const isLow=est<min,isCrit=est===0;
-    const lotes=db.lotes.filter(l=>l.codigo===p.codigo&&l.quantidade>0);
-    const near=lotes.sort((a,b)=>a.validade>b.validade?1:-1)[0];
+    const est=gE(p.codigo),min=gM(p.codigo),isL=est<min,isC=est===0;
+    const near=db.lotes.filter(l=>l.codigo===p.codigo&&l.quantidade>0).sort((a,b)=>a.validade>b.validade?1:-1)[0];
     const ico=p.foto?`<img src="${p.foto}" alt="">`:`<span>${ini(p.nome)}</span>`;
     return`<div class="pc" onclick="openDet('${p.codigo}')">
       <div class="pico">${ico}</div>
-      <div class="pinfo">
-        <div class="pname">${p.nome}</div>
-        <div class="pmeta">${near?'Val. '+fmtD(near.validade):'Sem lotes'}</div>
-      </div>
-      <div class="pqty ${isCrit?'crit':isLow?'low':''}">
-        <div class="q">${est.toLocaleString('pt-BR')}</div><div class="u">UN.</div>
-      </div>
+      <div class="pinfo"><div class="pname">${p.nome}</div><div class="pmeta">${near?'Val. '+fD(near.validade):'Sem lotes'}</div></div>
+      <div class="pqty ${isC?'crit':isL?'low':''}"><div class="q">${est.toLocaleString('pt-BR')}</div><div class="u">UN.</div></div>
     </div>`;
   }).join('');
-
-  // Stats
-  const totUn=db.produtos.reduce((s,p)=>s+getEst(p.codigo),0);
-  const baixo=db.produtos.filter(p=>getEst(p.codigo)<getMin(p.codigo)).length;
-  const ad=gc('alerta_val',90);
-  const venc=db.lotes.filter(l=>l.quantidade>0&&days(l.validade)<=ad).length;
-  const valor=db.produtos.reduce((s,p)=>{const pr=parseFloat(p.preco_custo)||0;return s+(getEst(p.codigo)*pr);},0);
+  const totU=db.produtos.reduce((s,p)=>s+gE(p.codigo),0);
+  const baixo=db.produtos.filter(p=>gE(p.codigo)<gM(p.codigo)).length;
+  const venc=db.lotes.filter(l=>l.quantidade>0&&dy(l.validade)<=gc('alerta_v',90)).length;
+  const val=db.produtos.reduce((s,p)=>s+(gE(p.codigo)*(parseFloat(p.preco_custo)||0)),0);
   document.getElementById('s-prod').textContent=db.produtos.length;
-  document.getElementById('s-un').textContent=totUn.toLocaleString('pt-BR');
+  document.getElementById('s-un').textContent=totU.toLocaleString('pt-BR');
   document.getElementById('s-baixo').textContent=baixo;
-  document.getElementById('s-val').textContent=valor>0?fmtR(valor):'R$ --';
+  document.getElementById('s-val').textContent=val>0?fR(val):'R$ --';
   const tot=baixo+venc;
-  const badge=document.getElementById('abadge');
-  badge.style.display=tot>0?'flex':'none';badge.textContent=tot;
+  const b=document.getElementById('abadge');b.style.display=tot>0?'flex':'none';b.textContent=tot;
 }
 
-// ═══════════════════════════════════════
-// DETALHE PRODUTO
-// ═══════════════════════════════════════
-let curP=null,movTipo='entrada';
-
+let curP=null,mTipo='entrada';
 function openDet(cod){
   curP=db.produtos.find(p=>p.codigo===cod);if(!curP)return;
   document.getElementById('det-nome').textContent=curP.nome;
   document.getElementById('det-cod').textContent=(curP.codigo&&!curP.codigo.startsWith('PROD_'))?'Cód: '+curP.codigo:'';
-  document.getElementById('det-preco').textContent=curP.preco_custo?'Custo: '+fmtR(curP.preco_custo):'';
+  document.getElementById('det-preco').textContent=curP.preco_custo?'Custo: '+fR(curP.preco_custo):'';
   const fi=document.getElementById('det-foto');
   fi.innerHTML=curP.foto?`<img src="${curP.foto}">`:`<span style="font-size:18px;font-weight:900">${ini(curP.nome)}</span>`;
   renderLotes();openM('m-det');
 }
-
 function renderLotes(){
   const lotes=db.lotes.filter(l=>l.codigo===curP.codigo);
   if(!lotes.length){document.getElementById('det-lotes').innerHTML='<div style="color:var(--gray);font-size:13px;padding:8px 0">Nenhum lote cadastrado</div>';return;}
-  document.getElementById('det-lotes').innerHTML=lotes.map(l=>`
-    <div class="lr">
-      <div style="flex:1">
-        <div style="font-size:18px;font-weight:900">${l.quantidade} un</div>
-        <div style="font-size:12px;color:var(--gray)">Val: ${fmtD(l.validade)}</div>
-        <div style="font-size:10px;color:var(--gray)">Entrada: ${fmtDT(l.data_entrada)}</div>
-      </div>
-      <button onclick="openEditLote(${l.id})" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:var(--font);font-size:12px;font-weight:800;color:var(--navy);cursor:pointer">✏️ Editar</button>
-    </div>`).join('');
+  document.getElementById('det-lotes').innerHTML=lotes.map(l=>`<div class="lr">
+    <div style="flex:1"><div style="font-size:18px;font-weight:900">${l.quantidade} un</div><div style="font-size:12px;color:var(--gray)">Val: ${fD(l.validade)}</div><div style="font-size:10px;color:var(--gray)">Entrada: ${fDT(l.data_entrada)}</div></div>
+    <button onclick="openEL(${l.id})" style="background:var(--bg);border:none;border-radius:10px;padding:8px 12px;font-family:var(--f);font-size:12px;font-weight:800;color:var(--navy);cursor:pointer">✏️ Editar</button>
+  </div>`).join('');
 }
-
-function openMovDet(tipo){
-  movTipo=tipo;
-  document.getElementById('mov-title').textContent=tipo==='entrada'?'📦 Registrar Entrada':'📤 Registrar Saída';
-  document.getElementById('mov-nome').textContent=curP.nome;
-  document.getElementById('mov-atual').textContent='Estoque atual: '+getEst(curP.codigo)+' un';
+function openMov(tipo){
+  mTipo=tipo;
+  document.getElementById('mov-t').textContent=tipo==='entrada'?'📦 Registrar Entrada':'📤 Registrar Saída';
+  document.getElementById('mov-n').textContent=curP.nome;
+  document.getElementById('mov-a').textContent='Estoque atual: '+gE(curP.codigo)+' un';
   document.getElementById('mov-btn').className='bc'+(tipo==='saida'?' pk':'');
-  document.getElementById('mov-val-grp').style.display=tipo==='entrada'?'':'none';
-  document.getElementById('mov-val').value='';
-  document.getElementById('mov-qty').value='';
-  document.getElementById('mov-prev').style.display='none';
+  document.getElementById('mov-vg').style.display=tipo==='entrada'?'':'none';
+  document.getElementById('mov-v').value='';document.getElementById('mov-q').value='';
+  document.getElementById('mov-p').style.display='none';
   closeM('m-det');openM('m-mov');
 }
-
-function movPreview(){
-  const qty=parseInt(document.getElementById('mov-qty').value)||0;
-  const prev=document.getElementById('mov-prev');
+function movPrev(){
+  const qty=parseInt(document.getElementById('mov-q').value)||0,prev=document.getElementById('mov-p');
   if(!qty||!curP){prev.style.display='none';return;}
-  const atual=getEst(curP.codigo),apos=movTipo==='entrada'?atual+qty:atual-qty,min=getMin(curP.codigo);
-  const aviso=movTipo==='saida'&&apos<0?'⚠️ Estoque insuficiente!':movTipo==='saida'&&apos<min?'⚠️ Vai ficar abaixo do mínimo':'';
+  const atual=gE(curP.codigo),apos=mTipo==='entrada'?atual+qty:atual-qty,min=gM(curP.codigo);
+  const av=mTipo==='saida'&&apos<0?'⚠️ Estoque insuficiente!':mTipo==='saida'&&apos<min?'⚠️ Vai ficar abaixo do mínimo':'';
   prev.style.display='';
-  prev.innerHTML=`Vai ficar: <strong>${apos} un</strong>${aviso?`<br><span style="color:var(--orange)">${aviso}</span>`:''}`;
+  prev.innerHTML=`Vai ficar: <strong>${apos} un</strong>${av?`<br><span style="color:var(--orange)">${av}</span>`:''}`;
 }
-
 function confirmMov(){
-  const qty=parseInt(document.getElementById('mov-qty').value)||0;
+  const qty=parseInt(document.getElementById('mov-q').value)||0;
   if(qty<=0){toast('Informe uma quantidade válida','re');return;}
-  if(movTipo==='entrada'){
-    const val=document.getElementById('mov-val').value;
+  if(mTipo==='entrada'){
+    const val=document.getElementById('mov-v').value;
     if(!val){toast('Informe a validade','re');return;}
     db.lotes.push({codigo:curP.codigo,quantidade:qty,validade:val,data_entrada:new Date().toISOString(),id:db.nid++});
-    regHist('entrada',curP.codigo,curP.nome,qty);
-    toast('✅ Entrada registrada!','gr');
+    rH('entrada',curP.codigo,curP.nome,qty);toast('✅ Entrada registrada!','gr');
   }else{
-    const tot=getEst(curP.codigo);
-    if(qty>tot){toast('Estoque insuficiente','re');return;}
+    const tot=gE(curP.codigo);if(qty>tot){toast('Estoque insuficiente','re');return;}
     let rest=qty;
-    db.lotes.filter(l=>l.codigo===curP.codigo&&l.quantidade>0).sort((a,b)=>a.validade>b.validade?1:-1).forEach(l=>{
-      if(rest<=0)return;const t=Math.min(rest,l.quantidade);l.quantidade-=t;rest-=t;
-    });
-    regHist('saida',curP.codigo,curP.nome,qty);
-    toast('✅ Saída registrada!','gr');
+    db.lotes.filter(l=>l.codigo===curP.codigo&&l.quantidade>0).sort((a,b)=>a.validade>b.validade?1:-1).forEach(l=>{if(rest<=0)return;const t=Math.min(rest,l.quantidade);l.quantidade-=t;rest-=t;});
+    rH('saida',curP.codigo,curP.nome,qty);toast('✅ Saída registrada!','gr');
   }
   sDB(db);closeM('m-mov');renderProds();
 }
 
-// ═══════════════════════════════════════
-// FOTO
-// ═══════════════════════════════════════
-function prevFoto(e,prevId,hidId){
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const b64=ev.target.result;
-    document.getElementById(hidId).value=b64;
-    document.getElementById(prevId).innerHTML=`<img src="${b64}">`;
-  };
-  r.readAsDataURL(f);
-}
+function pF(e,pi,hi){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{document.getElementById(hi).value=ev.target.result;document.getElementById(pi).innerHTML=`<img src="${ev.target.result}">`;};r.readAsDataURL(f);}
 
-// ═══════════════════════════════════════
-// ADD PRODUTO
-// ═══════════════════════════════════════
 function addProd(){
   const nome=document.getElementById('add-nome').value.trim();
   let cod=document.getElementById('add-cod').value.trim();
-  const min=parseInt(document.getElementById('add-min').value)||gc('min_padrao',30);
+  const min=parseInt(document.getElementById('add-min').value)||gc('min_p',30);
   const preco=parseFloat(document.getElementById('add-preco').value)||0;
-  const foto=document.getElementById('add-foto-b64').value||null;
+  const foto=document.getElementById('add-fb').value||null;
   if(!nome){toast('Informe o nome','re');return;}
   if(!cod)cod='PROD_'+Date.now();
   if(db.produtos.find(p=>p.codigo===cod)){toast('Código já cadastrado','re');return;}
   db.produtos.push({codigo:cod,nome,estoque_minimo:min,preco_custo:preco,foto});
   sDB(db);closeM('m-add');
-  document.getElementById('add-nome').value='';
-  document.getElementById('add-cod').value='';
-  document.getElementById('add-min').value='';
-  document.getElementById('add-preco').value='';
-  document.getElementById('add-foto-b64').value='';
-  document.getElementById('add-foto-prev').innerHTML='📷';
+  ['add-nome','add-cod','add-min','add-preco','add-fb'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('add-fp').innerHTML='📷';
   toast('✅ Produto cadastrado!','gr');renderProds();
 }
 
-// ═══════════════════════════════════════
-// EDITAR PRODUTO
-// ═══════════════════════════════════════
-function openEditProd(){
+function openEP(){
   if(!curP)return;
   document.getElementById('ep-nome').value=curP.nome;
   document.getElementById('ep-cod').value=(curP.codigo||'').startsWith('PROD_')?'':curP.codigo||'';
   document.getElementById('ep-min').value=curP.estoque_minimo||'';
   document.getElementById('ep-preco').value=curP.preco_custo||'';
-  document.getElementById('ep-foto-b64').value='';
-  const prev=document.getElementById('ep-foto-prev');
-  prev.innerHTML=curP.foto?`<img src="${curP.foto}">`:'📷';
-  closeM('m-det');openM('m-eprod');
+  document.getElementById('ep-fb').value='';
+  document.getElementById('ep-fp').innerHTML=curP.foto?`<img src="${curP.foto}">`:'📷';
+  closeM('m-det');openM('m-ep');
 }
-
-function confEditProd(){
+function confEP(){
   const nome=document.getElementById('ep-nome').value.trim();
   let cod=document.getElementById('ep-cod').value.trim();
-  const min=parseInt(document.getElementById('ep-min').value)||gc('min_padrao',30);
+  const min=parseInt(document.getElementById('ep-min').value)||gc('min_p',30);
   const preco=parseFloat(document.getElementById('ep-preco').value)||0;
-  const novaFoto=document.getElementById('ep-foto-b64').value;
+  const nf=document.getElementById('ep-fb').value;
   if(!nome){toast('Informe o nome','re');return;}
   if(!cod)cod=curP.codigo;
   if(cod!==curP.codigo&&db.produtos.find(p=>p.codigo===cod)){toast('Código já existe','re');return;}
-  if(cod!==curP.codigo){
-    db.lotes.filter(l=>l.codigo===curP.codigo).forEach(l=>l.codigo=cod);
-    db.hist.filter(h=>h.codigo===curP.codigo).forEach(h=>h.codigo=cod);
-  }
+  if(cod!==curP.codigo){db.lotes.filter(l=>l.codigo===curP.codigo).forEach(l=>l.codigo=cod);db.hist.filter(h=>h.codigo===curP.codigo).forEach(h=>h.codigo=cod);}
   curP.nome=nome;curP.codigo=cod;curP.estoque_minimo=min;curP.preco_custo=preco;
-  if(novaFoto)curP.foto=novaFoto;
-  sDB(db);closeM('m-eprod');renderProds();toast('✅ Produto atualizado!','gr');
+  if(nf)curP.foto=nf;
+  sDB(db);closeM('m-ep');renderProds();toast('✅ Produto atualizado!','gr');
 }
-
 function delProd(){
-  if(!confirm(`Excluir "${curP.nome}" e todos os lotes? Não pode ser desfeito.`))return;
+  if(!confirm(`Excluir "${curP.nome}" e todos os lotes?`))return;
   db.lotes=db.lotes.filter(l=>l.codigo!==curP.codigo);
   db.produtos=db.produtos.filter(p=>p.codigo!==curP.codigo);
-  sDB(db);closeM('m-eprod');curP=null;renderProds();toast('🗑️ Produto excluído','');
+  sDB(db);closeM('m-ep');curP=null;renderProds();toast('🗑️ Produto excluído','');
 }
 
-// ═══════════════════════════════════════
-// EDITAR LOTE
-// ═══════════════════════════════════════
-let editLId=null;
-function openEditLote(id){
-  const l=db.lotes.find(x=>x.id===id);if(!l)return;
-  editLId=id;
-  document.getElementById('el-nome').textContent=curP.nome;
-  document.getElementById('el-qty').value=l.quantidade;
-  document.getElementById('el-val').value=l.validade;
-  openM('m-elote');
-}
-function confEditLote(){
-  const l=db.lotes.find(x=>x.id===editLId);if(!l)return;
-  const qty=parseInt(document.getElementById('el-qty').value);
-  const val=document.getElementById('el-val').value;
+let eLId=null;
+function openEL(id){const l=db.lotes.find(x=>x.id===id);if(!l)return;eLId=id;document.getElementById('el-n').textContent=curP.nome;document.getElementById('el-qty').value=l.quantidade;document.getElementById('el-val').value=l.validade;openM('m-el');}
+function confEL(){
+  const l=db.lotes.find(x=>x.id===eLId);if(!l)return;
+  const qty=parseInt(document.getElementById('el-qty').value),val=document.getElementById('el-val').value;
   if(isNaN(qty)||qty<0){toast('Quantidade inválida','re');return;}
   if(!val){toast('Informe a validade','re');return;}
-  const diff=qty-l.quantidade;
-  l.quantidade=qty;l.validade=val;
-  if(diff!==0)regHist(diff>0?'entrada':'saida',l.codigo,curP.nome,Math.abs(diff));
-  sDB(db);closeM('m-elote');renderLotes();renderProds();toast('✅ Lote atualizado!','gr');
+  const diff=qty-l.quantidade;l.quantidade=qty;l.validade=val;
+  if(diff!==0)rH(diff>0?'entrada':'saida',l.codigo,curP.nome,Math.abs(diff));
+  sDB(db);closeM('m-el');renderLotes();renderProds();toast('✅ Lote atualizado!','gr');
 }
 function delLote(){
   if(!confirm('Excluir este lote?'))return;
-  const idx=db.lotes.findIndex(l=>l.id===editLId);if(idx===-1)return;
-  const l=db.lotes[idx];
-  regHist('saida',l.codigo,curP.nome,l.quantidade);
-  db.lotes.splice(idx,1);
-  sDB(db);closeM('m-elote');renderLotes();renderProds();toast('🗑️ Lote excluído','');
+  const idx=db.lotes.findIndex(l=>l.id===eLId);if(idx===-1)return;
+  const l=db.lotes[idx];rH('saida',l.codigo,curP.nome,l.quantidade);
+  db.lotes.splice(idx,1);sDB(db);closeM('m-el');renderLotes();renderProds();toast('🗑️ Lote excluído','');
 }
 
-// ═══════════════════════════════════════
-// ENTRADA / SAÍDA RÁPIDA
-// ═══════════════════════════════════════
-let rapSel={er:null,sr:null};
-
-function openEntrada(){
-  rapSel.er=null;
-  document.getElementById('er-s').value='';
-  document.getElementById('er-qty').value=1;
-  document.getElementById('er-val').value='';
-  document.getElementById('er-list').innerHTML='';
-  openM('m-entrada');
-  setTimeout(()=>document.getElementById('er-s').focus(),300);
-}
-function openSaida(){
-  rapSel.sr=null;
-  document.getElementById('sr-s').value='';
-  document.getElementById('sr-qty').value=1;
-  document.getElementById('sr-list').innerHTML='';
-  openM('m-saida');
-  setTimeout(()=>document.getElementById('sr-s').focus(),300);
-}
-function renderRapList(pf){
-  const q=document.getElementById(pf+'-s').value.toLowerCase();
-  const el=document.getElementById(pf+'-list');
+let rSel={er:null,sr:null};
+function openEntrada(){rSel.er=null;document.getElementById('er-s').value='';document.getElementById('er-qty').value=1;document.getElementById('er-val').value='';document.getElementById('er-list').innerHTML='';openM('m-entrada');setTimeout(()=>document.getElementById('er-s').focus(),300);}
+function openSaida(){rSel.sr=null;document.getElementById('sr-s').value='';document.getElementById('sr-qty').value=1;document.getElementById('sr-list').innerHTML='';openM('m-saida');setTimeout(()=>document.getElementById('sr-s').focus(),300);}
+function rapList(pf){
+  const q=document.getElementById(pf+'-s').value.toLowerCase(),el=document.getElementById(pf+'-list');
   if(!q){el.innerHTML='';return;}
   const found=db.produtos.filter(p=>p.nome.toLowerCase().includes(q)||(p.codigo||'').includes(q)).slice(0,6);
   if(!found.length){el.innerHTML='<div style="padding:10px;color:var(--gray);font-size:13px;font-weight:600">Nenhum produto encontrado</div>';return;}
-  el.innerHTML=found.map(p=>{
-    const sel=rapSel[pf]===p.codigo;
-    return`<div onclick="selRap('${pf}','${p.codigo}')" style="padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:4px;background:${sel?'var(--navy)':'var(--bg)'};color:${sel?'#fff':'var(--text)'};font-weight:700;font-size:14px">
-      ${p.nome} <span style="font-size:11px;opacity:.6">(${getEst(p.codigo)} un)</span>
-    </div>`;
-  }).join('');
+  el.innerHTML=found.map(p=>{const sel=rSel[pf]===p.codigo;return`<div onclick="selR('${pf}','${p.codigo}')" style="padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:4px;background:${sel?'var(--navy)':'var(--bg)'};color:${sel?'#fff':'var(--text)'};font-weight:700;font-size:14px">${p.nome} <span style="font-size:11px;opacity:.6">(${gE(p.codigo)} un)</span></div>`;}).join('');
 }
-function selRap(pf,cod){
-  rapSel[pf]=cod;
-  const p=db.produtos.find(x=>x.codigo===cod);
-  document.getElementById(pf+'-s').value=p?p.nome:cod;
-  document.getElementById(pf+'-list').innerHTML='';
-}
-function confEntrada(){
-  if(!rapSel.er){toast('Selecione um produto','re');return;}
-  const qty=parseInt(document.getElementById('er-qty').value)||0;
-  const val=document.getElementById('er-val').value;
+function selR(pf,cod){rSel[pf]=cod;const p=db.produtos.find(x=>x.codigo===cod);document.getElementById(pf+'-s').value=p?p.nome:cod;document.getElementById(pf+'-list').innerHTML='';}
+function confE(){
+  if(!rSel.er){toast('Selecione um produto','re');return;}
+  const qty=parseInt(document.getElementById('er-qty').value)||0,val=document.getElementById('er-val').value;
   if(qty<=0){toast('Quantidade inválida','re');return;}
   if(!val){toast('Informe a validade','re');return;}
-  const p=db.produtos.find(x=>x.codigo===rapSel.er);
-  db.lotes.push({codigo:rapSel.er,quantidade:qty,validade:val,data_entrada:new Date().toISOString(),id:db.nid++});
-  regHist('entrada',rapSel.er,p?p.nome:rapSel.er,qty);
-  sDB(db);closeM('m-entrada');toast('✅ Entrada registrada!','gr');renderProds();
+  const p=db.produtos.find(x=>x.codigo===rSel.er);
+  db.lotes.push({codigo:rSel.er,quantidade:qty,validade:val,data_entrada:new Date().toISOString(),id:db.nid++});
+  rH('entrada',rSel.er,p?p.nome:rSel.er,qty);sDB(db);closeM('m-entrada');toast('✅ Entrada registrada!','gr');renderProds();
 }
-function confSaida(){
-  if(!rapSel.sr){toast('Selecione um produto','re');return;}
+function confS(){
+  if(!rSel.sr){toast('Selecione um produto','re');return;}
   const qty=parseInt(document.getElementById('sr-qty').value)||0;
   if(qty<=0){toast('Quantidade inválida','re');return;}
-  const tot=getEst(rapSel.sr);
-  if(qty>tot){toast('Estoque insuficiente ('+tot+' un)','re');return;}
-  const p=db.produtos.find(x=>x.codigo===rapSel.sr);
-  let rest=qty;
-  db.lotes.filter(l=>l.codigo===rapSel.sr&&l.quantidade>0).sort((a,b)=>a.validade>b.validade?1:-1).forEach(l=>{
-    if(rest<=0)return;const t=Math.min(rest,l.quantidade);l.quantidade-=t;rest-=t;
-  });
-  regHist('saida',rapSel.sr,p?p.nome:rapSel.sr,qty);
-  sDB(db);closeM('m-saida');toast('✅ Saída registrada!','gr');renderProds();
+  const tot=gE(rSel.sr);if(qty>tot){toast('Estoque insuficiente ('+tot+' un)','re');return;}
+  const p=db.produtos.find(x=>x.codigo===rSel.sr);
+  let rest=qty;db.lotes.filter(l=>l.codigo===rSel.sr&&l.quantidade>0).sort((a,b)=>a.validade>b.validade?1:-1).forEach(l=>{if(rest<=0)return;const t=Math.min(rest,l.quantidade);l.quantidade-=t;rest-=t;});
+  rH('saida',rSel.sr,p?p.nome:rSel.sr,qty);sDB(db);closeM('m-saida');toast('✅ Saída registrada!','gr');renderProds();
 }
 
-// ═══════════════════════════════════════
-// CÂMERA IA
-// ═══════════════════════════════════════
-let camProd=null;
-
-function startCam(){
-  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280}}})
-  .then(stream=>{
-    camStream=stream;
-    const v=document.getElementById('cam-video');v.srcObject=stream;v.play();
-    document.getElementById('cam-start-btn').style.display='none';
-    document.getElementById('cam-cap-btn').style.display='';
-    document.getElementById('cam-result').style.display='none';
-  }).catch(()=>toast('Câmera não disponível','re'));
-}
-
-function stopCam(){
-  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
-  document.getElementById('cam-start-btn').style.display='';
-  document.getElementById('cam-cap-btn').style.display='none';
-  const v=document.getElementById('cam-video');v.srcObject=null;
-}
-
-function captureCam(){
-  const v=document.getElementById('cam-video');
-  const c=document.createElement('canvas');
-  c.width=v.videoWidth;c.height=v.videoHeight;
-  c.getContext('2d').drawImage(v,0,0);
-  identImg(c.toDataURL('image/jpeg',.85));
-}
-
-function camFile(e){
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>identImg(ev.target.result);
-  r.readAsDataURL(f);e.target.value='';
-}
-
-async function identImg(dataUrl){
-  const key=gc('api_key','');
-  if(!key){toast('Configure a chave de IA em Ajustes','re');goTab('ajustes');return;}
-  document.getElementById('cam-result').style.display='none';
-  document.getElementById('cam-loading').style.display='block';
-  document.getElementById('cam-cap-btn').style.display='none';
-
-  const lista=db.produtos.map(p=>`- "${p.nome}" (codigo: ${p.codigo})`).join('\n');
-  const b64=dataUrl.split(',')[1];
-  const mt=dataUrl.startsWith('data:image/png')?'image/png':'image/jpeg';
-
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({
-        model:'claude-opus-4-5',max_tokens:300,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mt,data:b64}},
-          {type:'text',text:`Você é assistente de estoque da Emagrecentro Araruama. Analise a imagem e identifique qual produto da lista está sendo mostrado. Responda SOMENTE com JSON válido, sem texto adicional: {"encontrado":true/false,"codigo":"codigo_do_produto","nome":"nome_do_produto","confianca":"alta/media/baixa"}. Se não encontrar nenhum produto da lista, retorne {"encontrado":false}.\n\nProdutos cadastrados:\n${lista}`}
-        ]}]
-      })
-    });
-    const data=await resp.json();
-    const txt=(data.content?.[0]?.text||'{}').replace(/```json|```/g,'').trim();
-    const res=JSON.parse(txt);
-    document.getElementById('cam-loading').style.display='none';
-    if(res.encontrado&&res.codigo){
-      camProd=db.produtos.find(p=>p.codigo===res.codigo);
-      if(camProd){
-        const icoEl=document.getElementById('cr-ico');
-        icoEl.innerHTML=camProd.foto?`<img src="${camProd.foto}" style="width:48px;height:48px;border-radius:10px;object-fit:cover">`:`<span style="font-weight:900">${ini(camProd.nome)}</span>`;
-        document.getElementById('cr-nome').textContent=camProd.nome;
-        document.getElementById('cr-info').textContent='Estoque: '+getEst(camProd.codigo)+' un · Confiança: '+res.confianca;
-        document.getElementById('cam-result').style.display='block';
-        if(navigator.vibrate)navigator.vibrate([100,50,100]);
-      }else toast('Produto identificado mas não encontrado no cadastro','re');
-    }else toast('Produto não reconhecido. Tente uma foto mais clara 📸','re');
-    if(camStream)document.getElementById('cam-cap-btn').style.display='';
-  }catch(err){
-    document.getElementById('cam-loading').style.display='none';
-    if(camStream)document.getElementById('cam-cap-btn').style.display='';
-    toast('Erro: '+(err.message||'verifique a chave de IA'),'re');
-  }
-}
-
-function camAct(tipo){
-  if(!camProd)return;
-  curP=camProd;
-  openMovDet(tipo);
-}
-
-// ═══════════════════════════════════════
-// HISTÓRICO
-// ═══════════════════════════════════════
-function regHist(tipo,cod,nome,qty){
-  if(!db.hist)db.hist=[];
-  db.hist.unshift({tipo,codigo:cod,nome,qty,data:new Date().toISOString()});
-  if(db.hist.length>1000)db.hist=db.hist.slice(0,1000);
-}
-
+function rH(tipo,cod,nome,qty){if(!db.hist)db.hist=[];db.hist.unshift({tipo,codigo:cod,nome,qty,data:new Date().toISOString()});if(db.hist.length>1000)db.hist=db.hist.slice(0,1000);}
 let hf='all';
-function setHF(f){
-  hf=f;
-  document.querySelectorAll('.hf button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('hf-'+f).classList.add('active');
-  renderHist();
-}
-
+function setHF(f){hf=f;document.querySelectorAll('.hf button').forEach(b=>b.classList.remove('active'));document.getElementById('hf-'+f).classList.add('active');renderHist();}
 function renderHist(){
   const el=document.getElementById('hist-list');
   if(!db.hist||!db.hist.length){el.innerHTML='<div class="empty"><div class="ico">📋</div><p>Nenhuma movimentação ainda</p></div>';return;}
-  let items=db.hist;
-  if(hf!=='all')items=items.filter(h=>h.tipo===hf);
+  let items=db.hist;if(hf!=='all')items=items.filter(h=>h.tipo===hf);
   if(!items.length){el.innerHTML='<div class="empty"><p>Sem registros</p></div>';return;}
-  el.innerHTML=items.slice(0,150).map((h,i)=>{
-    const idx=db.hist.indexOf(h);
-    return`<div class="hcard ${h.tipo}" style="align-items:flex-start">
-      <div style="margin-top:2px;font-size:18px">${h.tipo==='entrada'?'📦':'📤'}</div>
-      <div style="flex:1">
-        <div style="font-size:14px;font-weight:800">${h.nome}</div>
-        <div style="font-size:11px;color:var(--gray)">${fmtDT(h.data)}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
-        <div style="font-size:17px;font-weight:900;color:${h.tipo==='entrada'?'var(--green)':'var(--pink)'}">${h.tipo==='entrada'?'+':'-'}${h.qty}</div>
-        <button onclick="delHist(${idx})" style="background:#fff0f0;border:none;border-radius:8px;padding:4px 10px;font-family:var(--font);font-size:11px;font-weight:800;color:var(--red);cursor:pointer">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
+  el.innerHTML=items.slice(0,150).map(h=>{const idx=db.hist.indexOf(h);return`<div class="hcard ${h.tipo}" style="align-items:flex-start">
+    <div style="margin-top:2px;font-size:18px">${h.tipo==='entrada'?'📦':'📤'}</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:800">${h.nome}</div><div style="font-size:11px;color:var(--gray)">${fDT(h.data)}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+      <div style="font-size:17px;font-weight:900;color:${h.tipo==='entrada'?'var(--green)':'var(--pink)'}">${h.tipo==='entrada'?'+':'-'}${h.qty}</div>
+      <button onclick="delH(${idx})" style="background:#fff0f0;border:none;border-radius:8px;padding:4px 10px;font-family:var(--f);font-size:11px;font-weight:800;color:var(--red);cursor:pointer">🗑️</button>
+    </div>
+  </div>`;}).join('');
 }
+function delH(idx){const h=db.hist[idx];if(!h)return;if(!confirm(`Apagar este registro?\n"${h.tipo==='entrada'?'+':'-'}${h.qty} ${h.nome}"\n\n⚠️ Isso NÃO reverte o estoque.`))return;db.hist.splice(idx,1);sDB(db);renderHist();toast('🗑️ Apagado','');}
 
-function delHist(idx){
-  const h=db.hist[idx];if(!h)return;
-  if(!confirm(`Apagar este registro do histórico?\n\n"${h.tipo==='entrada'?'+':'-'}${h.qty} ${h.nome}"\n\n⚠️ Isso NÃO reverte o estoque.`))return;
-  db.hist.splice(idx,1);sDB(db);renderHist();toast('🗑️ Registro apagado','');
-}
-
-// ═══════════════════════════════════════
-// ALERTAS
-// ═══════════════════════════════════════
 function renderAlertas(){
-  const ad=gc('alerta_val',90);
-  let html='';
-  const baixo=db.produtos.filter(p=>getEst(p.codigo)<getMin(p.codigo));
-  if(baixo.length){
-    html+='<div class="stitle">⚠️ Estoque Baixo</div>';
-    html+=baixo.map(p=>`<div class="ac or" onclick="openDet('${p.codigo}')">
-      <div style="font-size:24px">📉</div>
-      <div><div style="font-size:15px;font-weight:800">${p.nome}</div><div style="font-size:12px;color:var(--gray)">${getEst(p.codigo)} un · mínimo ${getMin(p.codigo)} un</div></div>
-    </div>`).join('');
-  }
-  const venc=db.lotes.filter(l=>l.quantidade>0&&days(l.validade)<=ad).sort((a,b)=>a.validade>b.validade?1:-1);
-  if(venc.length){
-    html+='<div class="stitle" style="margin-top:16px">📅 Próximos ao Vencimento</div>';
-    html+=venc.map(l=>{
-      const p=db.produtos.find(x=>x.codigo===l.codigo);
-      const d=days(l.validade);
-      return`<div class="ac re" onclick="openDet('${l.codigo}')">
-        <div style="font-size:24px">⏰</div>
-        <div><div style="font-size:15px;font-weight:800">${p?p.nome:l.codigo}</div><div style="font-size:12px;color:var(--gray)">${l.quantidade} un · Vence em ${d} dias (${fmtD(l.validade)})</div></div>
-      </div>`;
-    }).join('');
-  }
+  const ad=gc('alerta_v',90);let html='';
+  const baixo=db.produtos.filter(p=>gE(p.codigo)<gM(p.codigo));
+  if(baixo.length){html+='<div class="stitle">⚠️ Estoque Baixo</div>';html+=baixo.map(p=>`<div class="ac or" onclick="openDet('${p.codigo}')"><div style="font-size:24px">📉</div><div><div style="font-size:15px;font-weight:800">${p.nome}</div><div style="font-size:12px;color:var(--gray)">${gE(p.codigo)} un · mínimo ${gM(p.codigo)} un</div></div></div>`).join('');}
+  const venc=db.lotes.filter(l=>l.quantidade>0&&dy(l.validade)<=ad).sort((a,b)=>a.validade>b.validade?1:-1);
+  if(venc.length){html+='<div class="stitle" style="margin-top:16px">📅 Próximos ao Vencimento</div>';html+=venc.map(l=>{const p=db.produtos.find(x=>x.codigo===l.codigo),d=dy(l.validade);return`<div class="ac re" onclick="openDet('${l.codigo}')"><div style="font-size:24px">⏰</div><div><div style="font-size:15px;font-weight:800">${p?p.nome:l.codigo}</div><div style="font-size:12px;color:var(--gray)">${l.quantidade} un · Vence em ${d} dias (${fD(l.validade)})</div></div></div>`;}).join('');}
   if(!html)html='<div class="empty"><div class="ico">✅</div><p>Nenhum alerta! Tudo ok.</p></div>';
-  else{
-    const wp=gc('whatsapp','');
-    if(wp)html+=`<button onclick="enviarAlerta()" style="width:100%;padding:16px;border-radius:14px;border:none;background:#25D366;color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.103 1.51 5.836L.057 23.455a.5.5 0 00.488.607l5.788-1.517A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.744-.524-5.293-1.432l-.379-.224-3.932 1.031 1.05-3.833-.247-.394A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      Avisar Gerente pelo WhatsApp
-    </button>`;
-  }
+  else{const wp=gc('whatsapp','');if(wp)html+=`<button onclick="envAlerta()" style="width:100%;padding:16px;border-radius:14px;border:none;background:#25D366;color:#fff;font-family:var(--f);font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.103 1.51 5.836L.057 23.455a.5.5 0 00.488.607l5.788-1.517A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.744-.524-5.293-1.432l-.379-.224-3.932 1.031 1.05-3.833-.247-.394A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Avisar Gerente pelo WhatsApp</button>`;}
   document.getElementById('alert-list').innerHTML=html;
 }
-
-function enviarAlerta(){
+function envAlerta(){
   const wp=gc('whatsapp','');if(!wp){toast('Configure o WhatsApp em Ajustes','re');return;}
-  const emp=gc('empresa','Emagrecentro Araruama'),ad=gc('alerta_val',90);
-  const baixo=db.produtos.filter(p=>getEst(p.codigo)<getMin(p.codigo));
-  const venc=db.lotes.filter(l=>l.quantidade>0&&days(l.validade)<=ad).sort((a,b)=>a.validade>b.validade?1:-1);
+  const emp=gc('empresa','Emagrecentro Araruama'),ad=gc('alerta_v',90);
+  const baixo=db.produtos.filter(p=>gE(p.codigo)<gM(p.codigo));
+  const venc=db.lotes.filter(l=>l.quantidade>0&&dy(l.validade)<=ad).sort((a,b)=>a.validade>b.validade?1:-1);
   let msg=`⚠️ *Alerta de Estoque — ${emp}*\n📅 ${new Date().toLocaleDateString('pt-BR')}\n\n`;
-  if(baixo.length){msg+=`📉 *ESTOQUE BAIXO (${baixo.length} produto${baixo.length>1?'s':''})*\n`;baixo.forEach(p=>{msg+=`• ${p.nome}: ${getEst(p.codigo)} un (mín. ${getMin(p.codigo)})\n`;});msg+='\n';}
-  if(venc.length){msg+=`⏰ *PRÓXIMOS AO VENCIMENTO*\n`;venc.forEach(l=>{const p=db.produtos.find(x=>x.codigo===l.codigo);const d=days(l.validade);msg+=`• ${p?p.nome:l.codigo}: ${l.quantidade} un — vence em ${d} dia${d!==1?'s':''} (${fmtD(l.validade)})\n`;});}
+  if(baixo.length){msg+=`📉 *ESTOQUE BAIXO*\n`;baixo.forEach(p=>{msg+=`• ${p.nome}: ${gE(p.codigo)} un (mín. ${gM(p.codigo)})\n`;});msg+='\n';}
+  if(venc.length){msg+=`⏰ *PRÓXIMOS AO VENCIMENTO*\n`;venc.forEach(l=>{const p=db.produtos.find(x=>x.codigo===l.codigo),d=dy(l.validade);msg+=`• ${p?p.nome:l.codigo}: ${l.quantidade} un — vence em ${d} dia${d!==1?'s':''} (${fD(l.validade)})\n`;});}
   window.open(`https://wa.me/${wp}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// ═══════════════════════════════════════
-// RELATÓRIOS
-// ═══════════════════════════════════════
-let perDias=7;
-function setPer(d,el){perDias=d;document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderRel();}
-
+let perD=7;
+function setPer(d,el){perD=d;document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderRel();}
 function renderRel(){
-  const desde=new Date();desde.setDate(desde.getDate()-perDias);
+  const desde=new Date();desde.setDate(desde.getDate()-perD);
   const items=db.hist.filter(h=>new Date(h.data)>=desde);
-  const entradas=items.filter(h=>h.tipo==='entrada');
-  const saidas=items.filter(h=>h.tipo==='saida');
-  const totE=entradas.reduce((s,h)=>s+h.qty,0),totS=saidas.reduce((s,h)=>s+h.qty,0);
-
-  document.getElementById('rel-resumo').innerHTML=`
-    <div class="sc"><div class="lbl">Entradas</div><div class="val gr">${totE}</div></div>
-    <div class="sc"><div class="lbl">Saídas</div><div class="val re">${totS}</div></div>
-    <div class="sc"><div class="lbl">Movimentações</div><div class="val">${items.length}</div></div>
-    <div class="sc"><div class="lbl">Saldo período</div><div class="val" style="font-size:22px;margin-top:6px;color:${totE-totS>=0?'var(--green)':'var(--red)'}">${totE-totS>=0?'+':''}${totE-totS}</div></div>`;
-
-  const mkChart=(list,pink)=>{
-    if(!list.length)return'<div style="color:var(--gray);font-size:13px;padding:8px 0">Sem registros no período</div>';
-    const max=list[0][1];
-    return list.map(([n,v])=>`<div class="br"><div class="bl" title="${n}">${n}</div><div class="bt"><div class="bf${pink?' pk':''}" style="width:${Math.round(v/max*100)}%">${v}</div></div></div>`).join('');
-  };
-
-  const mapS={};saidas.forEach(h=>{mapS[h.nome]=(mapS[h.nome]||0)+h.qty;});
-  document.getElementById('ch-saidas').innerHTML=mkChart(Object.entries(mapS).sort((a,b)=>b[1]-a[1]).slice(0,6),true);
-
-  const mapE={};entradas.forEach(h=>{mapE[h.nome]=(mapE[h.nome]||0)+h.qty;});
-  document.getElementById('ch-entradas').innerHTML=mkChart(Object.entries(mapE).sort((a,b)=>b[1]-a[1]).slice(0,6),false);
-
-  const compras=db.produtos.filter(p=>getEst(p.codigo)<getMin(p.codigo)).sort((a,b)=>(getMin(b.codigo)-getEst(b.codigo))-(getMin(a.codigo)-getEst(a.codigo)));
-  document.getElementById('lista-compras').innerHTML=compras.length?compras.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gl)">
-      <div><div style="font-weight:800;font-size:14px">${p.nome}</div><div style="font-size:12px;color:var(--gray)">${getEst(p.codigo)} un · mín ${getMin(p.codigo)} un</div></div>
-      <span class="chip re">pedir ${getMin(p.codigo)-getEst(p.codigo)}+ un</span>
-    </div>`).join(''):'<div style="color:var(--green);font-weight:700;padding:8px 0">✅ Estoque ok! Nada para pedir agora.</div>';
+  const ents=items.filter(h=>h.tipo==='entrada'),sais=items.filter(h=>h.tipo==='saida');
+  const tE=ents.reduce((s,h)=>s+h.qty,0),tS=sais.reduce((s,h)=>s+h.qty,0);
+  document.getElementById('rel-res').innerHTML=`<div class="sc"><div class="lbl">Entradas</div><div class="val" style="color:var(--green)">${tE}</div></div><div class="sc"><div class="lbl">Saídas</div><div class="val" style="color:var(--pink)">${tS}</div></div><div class="sc"><div class="lbl">Movimentações</div><div class="val">${items.length}</div></div><div class="sc"><div class="lbl">Saldo</div><div class="val" style="font-size:22px;margin-top:6px;color:${tE-tS>=0?'var(--green)':'var(--red)'}">${tE-tS>=0?'+':''}${tE-tS}</div></div>`;
+  const mk=(list,pk)=>{if(!list.length)return'<div style="color:var(--gray);font-size:13px;padding:8px 0">Sem registros no período</div>';const mx=list[0][1];return list.map(([n,v])=>`<div class="br"><div class="bl" title="${n}">${n}</div><div class="bt"><div class="bf${pk?' pk':''}" style="width:${Math.round(v/mx*100)}%">${v}</div></div></div>`).join('');};
+  const mS={};sais.forEach(h=>{mS[h.nome]=(mS[h.nome]||0)+h.qty;});document.getElementById('ch-s').innerHTML=mk(Object.entries(mS).sort((a,b)=>b[1]-a[1]).slice(0,6),true);
+  const mE={};ents.forEach(h=>{mE[h.nome]=(mE[h.nome]||0)+h.qty;});document.getElementById('ch-e').innerHTML=mk(Object.entries(mE).sort((a,b)=>b[1]-a[1]).slice(0,6),false);
+  const comp=db.produtos.filter(p=>gE(p.codigo)<gM(p.codigo)).sort((a,b)=>(gM(b.codigo)-gE(b.codigo))-(gM(a.codigo)-gE(a.codigo)));
+  document.getElementById('lista-c').innerHTML=comp.length?comp.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gl)"><div><div style="font-weight:800;font-size:14px">${p.nome}</div><div style="font-size:12px;color:var(--gray)">${gE(p.codigo)} un · mín ${gM(p.codigo)} un</div></div><span class="chip re">pedir ${gM(p.codigo)-gE(p.codigo)}+ un</span></div>`).join(''):'<div style="color:var(--green);font-weight:700;padding:8px 0">✅ Estoque ok!</div>';
 }
-
 function enviarCompras(){
   const wp=gc('whatsapp','');if(!wp){toast('Configure o WhatsApp em Ajustes','re');return;}
-  const compras=db.produtos.filter(p=>getEst(p.codigo)<getMin(p.codigo));
-  if(!compras.length){toast('Nenhum produto abaixo do mínimo!','gr');return;}
+  const comp=db.produtos.filter(p=>gE(p.codigo)<gM(p.codigo));
+  if(!comp.length){toast('Nenhum produto abaixo do mínimo!','gr');return;}
   const emp=gc('empresa','Emagrecentro Araruama');
   let msg=`🛒 *Lista de Compras — ${emp}*\n📅 ${new Date().toLocaleDateString('pt-BR')}\n\n`;
-  compras.forEach(p=>{msg+=`• ${p.nome}: tem ${getEst(p.codigo)} un, pedir pelo menos ${getMin(p.codigo)-getEst(p.codigo)} un\n`;});
+  comp.forEach(p=>{msg+=`• ${p.nome}: tem ${gE(p.codigo)} un, pedir pelo menos ${gM(p.codigo)-gE(p.codigo)} un\n`;});
   window.open(`https://wa.me/${wp}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// ═══════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════
-function renderCfg(){
-  document.getElementById('cfg-emp').value=gc('empresa','Emagrecentro Araruama');
-  document.getElementById('cfg-wp').value=gc('whatsapp','');
-  document.getElementById('cfg-min').value=gc('min_padrao',80);
-  document.getElementById('cfg-val').value=gc('alerta_val',90);
-  document.getElementById('cfg-pin').value='';
-  document.getElementById('cfg-key').value=gc('api_key','');
-}
+function renderCfg(){document.getElementById('cfg-emp').value=gc('empresa','Emagrecentro Araruama');document.getElementById('cfg-wp').value=gc('whatsapp','');document.getElementById('cfg-min').value=gc('min_p',80);document.getElementById('cfg-val').value=gc('alerta_v',90);}
 function saveCfg(){
   sc('empresa',document.getElementById('cfg-emp').value.trim()||'Emagrecentro Araruama');
   sc('whatsapp',document.getElementById('cfg-wp').value.trim());
-  sc('min_padrao',parseInt(document.getElementById('cfg-min').value)||80);
-  sc('alerta_val',parseInt(document.getElementById('cfg-val').value)||90);
-  const pin=document.getElementById('cfg-pin').value.trim();
-  if(pin){if(pin.length===4&&/^\d{4}$/.test(pin))sc('pin',pin);else{toast('PIN deve ter exatamente 4 números','re');return;}}
-  sc('api_key',document.getElementById('cfg-key').value.trim());
-  sDB(db);
-  document.getElementById('hdr-sub').textContent=gc('empresa').toUpperCase();
-  toast('✅ Configurações salvas!','gr');
+  sc('min_p',parseInt(document.getElementById('cfg-min').value)||80);
+  sc('alerta_v',parseInt(document.getElementById('cfg-val').value)||90);
+  sDB(db);document.getElementById('hdr-sub').textContent=gc('empresa').toUpperCase();toast('✅ Configurações salvas!','gr');
 }
 
-// ═══════════════════════════════════════
-// BACKUP
-// ═══════════════════════════════════════
 function exportBk(){
-  const data={produtos:db.produtos,lotes:db.lotes,config:db.config.filter(c=>c.key!=='pin'&&c.key!=='api_key'),hist:db.hist,exported_at:new Date().toISOString()};
+  const data={produtos:db.produtos,lotes:db.lotes,config:db.config,hist:db.hist,exported_at:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;
-  a.download='emagrecentro-'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();URL.revokeObjectURL(url);
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  a.download='emagrecentro-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);
   toast('✅ Backup exportado!','gr');
 }
 function importBk(e){
   const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
+  const r=new FileReader();r.onload=ev=>{
     try{
       const data=JSON.parse(ev.target.result);
       if(!data.produtos||!data.lotes){toast('Arquivo inválido','re');return;}
-      const pin=gc('pin',''),key=gc('api_key','');
-      db.produtos=data.produtos||[];db.lotes=data.lotes||[];
-      db.config=data.config||[];db.hist=data.hist||data.historico||[];
+      db.produtos=data.produtos||[];db.lotes=data.lotes||[];db.config=data.config||[];db.hist=data.hist||data.historico||[];
       db.nid=db.lotes.length?Math.max(...db.lotes.map(l=>l.id||0))+1:1;
-      if(pin)sc('pin',pin);if(key)sc('api_key',key);
-      // Fix nome errado
       if(gc('empresa','')==='Emagrentro Araruama')sc('empresa','Emagrecentro Araruama');
-      sDB(db);renderProds();renderCfg();
-      toast('✅ Backup importado!','gr');
+      sDB(db);renderProds();renderCfg();toast('✅ Backup importado!','gr');
     }catch(err){toast('Erro ao importar','re');}
-  };
-  r.readAsText(f);e.target.value='';
+  };r.readAsText(f);e.target.value='';
 }
 
-// ═══════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════
-function appInit(){
+(function(){
   if(gc('empresa','')==='Emagrentro Araruama')sc('empresa','Emagrecentro Araruama');
   document.getElementById('hdr-sub').textContent=gc('empresa','Emagrecentro Araruama').toUpperCase();
   renderProds();
-}
+})();
 </script>
 </body>
 </html>
